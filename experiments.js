@@ -29,12 +29,12 @@ const EXPERIMENTS = {
   courtPackingFuture: {
     id: 'courtPackingFuture',
     label: 'Court Packing (Future)',
-    description: 'Add 4 seats at the first unified Democratic government after 2025.',
+    description: 'Add 4 seats at the first unified Democratic government after 2026.',
     pipeline: 'courtPacking',
     params: {
       courtPackN: 4,
       courtPackingParty: 1, // Dem only
-      courtPackingStartYear: 2025,
+      courtPackingStartYear: 2026,
     },
   },
 
@@ -51,7 +51,7 @@ const EXPERIMENTS = {
   termLimits18: {
     id: 'termLimits18',
     label: 'Term Limits (18 years)',
-    description: 'Mandatory exit after 18 years, staggered by seniority starting 2025.',
+    description: 'Mandatory exit after 18 years, staggered by seniority starting 2026.',
     pipeline: 'termLimits',
     params: { termLimitYears: 18 },
   },

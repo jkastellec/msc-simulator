@@ -2,31 +2,31 @@
 // All data from the R codebase's CSV inputs, embedded for browser use.
 
 // ============================================================
-// STARTING COURT (2025)
-// From base_data_from_characteristics_for_simulations_2025.csv
+// STARTING COURT (2026)
+// From base_data_from_characteristics_for_simulations_2026.csv
 // seatid reassigned per master_run_all_sims_2024.R: c(7,9,2,8,6,1,3,4,5)
 // ============================================================
-const STARTING_COURT_2025 = [
-  { justice: "gorsuch",   seatid: 7, demJustice: 0, ideology:  0.58338,    age: 57, originalSeat: 1 },
-  { justice: "kavanaugh", seatid: 9, demJustice: 0, ideology:  0.6704823,  age: 59, originalSeat: 2 },
-  { justice: "jackson",   seatid: 2, demJustice: 1, ideology: -0.32,       age: 54, originalSeat: 3 },
-  { justice: "sotomayor", seatid: 8, demJustice: 1, ideology: -0.2987079, age: 70, originalSeat: 4 },
-  { justice: "kagan",     seatid: 6, demJustice: 1, ideology: -0.2919551, age: 64, originalSeat: 5 },
-  { justice: "thomas",    seatid: 1, demJustice: 0, ideology:  0.5426272,  age: 76, originalSeat: 6 },
-  { justice: "barrett",   seatid: 3, demJustice: 0, ideology:  0.4545732,  age: 52, originalSeat: 7 },
-  { justice: "roberts",   seatid: 4, demJustice: 0, ideology:  0.6372294,  age: 69, originalSeat: 8 },
-  { justice: "alito",     seatid: 5, demJustice: 0, ideology:  0.6505306,  age: 74, originalSeat: 9 },
+const STARTING_COURT_2026 = [
+  { justice: "gorsuch",   seatid: 7, demJustice: 0, ideology:  0.58338,    age: 58, originalSeat: 1 },
+  { justice: "kavanaugh", seatid: 9, demJustice: 0, ideology:  0.6704823,  age: 60, originalSeat: 2 },
+  { justice: "jackson",   seatid: 2, demJustice: 1, ideology: -0.32,       age: 55, originalSeat: 3 },
+  { justice: "sotomayor", seatid: 8, demJustice: 1, ideology: -0.2987079, age: 71, originalSeat: 4 },
+  { justice: "kagan",     seatid: 6, demJustice: 1, ideology: -0.2919551, age: 65, originalSeat: 5 },
+  { justice: "thomas",    seatid: 1, demJustice: 0, ideology:  0.5426272,  age: 77, originalSeat: 6 },
+  { justice: "barrett",   seatid: 3, demJustice: 0, ideology:  0.4545732,  age: 53, originalSeat: 7 },
+  { justice: "roberts",   seatid: 4, demJustice: 0, ideology:  0.6372294,  age: 70, originalSeat: 8 },
+  { justice: "alito",     seatid: 5, demJustice: 0, ideology:  0.6505306,  age: 75, originalSeat: 9 },
 ];
 
-// Starting political state in 2025: Rep president, Rep senate, unified
-const STARTING_YEAR_2025 = 2025;
-const STARTING_DEM_PRESIDENT_2025 = 0;
-const STARTING_DEM_SEN_MAJ_2025 = 0;
-const STARTING_UNIFIED_GOV_2025 = 1;
+// Starting political state in 2026: Rep president, Rep senate, unified
+const STARTING_YEAR_2026 = 2026;
+const STARTING_DEM_PRESIDENT_2026 = 0;
+const STARTING_DEM_SEN_MAJ_2026 = 0;
+const STARTING_UNIFIED_GOV_2026 = 1;
 
-// President history init for 2025 baseline
-// 6 years looking back: 2020=Trump(0), 2021-2024=Biden(1,1,1,1), 2025=Trump(0)
-const PRESIDENT_HISTORY_INIT_2025 = [0, 1, 1, 1, 1, 0];
+// President history init for 2026 baseline
+// 6 years looking back: 2021-2024=Biden(1,1,1,1), 2025-2026=Trump(0,0)
+const PRESIDENT_HISTORY_INIT_2026 = [1, 1, 1, 1, 0, 0];
 
 // ============================================================
 // STARTING COURT (2016 COUNTERFACTUAL)
@@ -56,29 +56,29 @@ const PRESIDENT_HISTORY_INIT_2016CF = [0, 1, 1, 1, 1, 1];
 
 // ============================================================
 // RETROACTIVE COURT PACKING (2021) STARTING COURT
-// Hypothetical: Democrats packed 4 seats in 2021. By 2025 those
-// justices are ~56 years old. Uses the standard 2025 baseline
+// Hypothetical: Democrats packed 4 seats in 2021. By 2026 those
+// justices are ~57 years old. Uses the standard 2026 baseline
 // 9 justices plus 4 Dem-appointed justices with pre-drawn ideology.
 // Ideology drawn from Beta(3,11) scaled to [-1,1] (Dem side).
-// Ages set to 56 (appointed at ~52 in 2021, now 4 years later).
+// Ages set to 57 (appointed at ~52 in 2021, now 5 years later).
 // ============================================================
 const STARTING_COURT_PACKED_2021 = [
-  // Original 9 (same as STARTING_COURT_2025)
-  { justice: "gorsuch",   seatid: 7,  demJustice: 0, ideology:  0.58338,    age: 57, originalSeat: 1 },
-  { justice: "kavanaugh", seatid: 9,  demJustice: 0, ideology:  0.6704823,  age: 59, originalSeat: 2 },
-  { justice: "jackson",   seatid: 2,  demJustice: 1, ideology: -0.32,       age: 54, originalSeat: 3 },
-  { justice: "sotomayor", seatid: 8,  demJustice: 1, ideology: -0.2987079, age: 70, originalSeat: 4 },
-  { justice: "kagan",     seatid: 6,  demJustice: 1, ideology: -0.2919551, age: 64, originalSeat: 5 },
-  { justice: "thomas",    seatid: 1,  demJustice: 0, ideology:  0.5426272,  age: 76, originalSeat: 6 },
-  { justice: "barrett",   seatid: 3,  demJustice: 0, ideology:  0.4545732,  age: 52, originalSeat: 7 },
-  { justice: "roberts",   seatid: 4,  demJustice: 0, ideology:  0.6372294,  age: 69, originalSeat: 8 },
-  { justice: "alito",     seatid: 5,  demJustice: 0, ideology:  0.6505306,  age: 74, originalSeat: 9 },
-  // 4 packed Dem justices (appointed 2021, aged ~52 then, ~56 now)
+  // Original 9 (same as STARTING_COURT_2026)
+  { justice: "gorsuch",   seatid: 7,  demJustice: 0, ideology:  0.58338,    age: 58, originalSeat: 1 },
+  { justice: "kavanaugh", seatid: 9,  demJustice: 0, ideology:  0.6704823,  age: 60, originalSeat: 2 },
+  { justice: "jackson",   seatid: 2,  demJustice: 1, ideology: -0.32,       age: 55, originalSeat: 3 },
+  { justice: "sotomayor", seatid: 8,  demJustice: 1, ideology: -0.2987079, age: 71, originalSeat: 4 },
+  { justice: "kagan",     seatid: 6,  demJustice: 1, ideology: -0.2919551, age: 65, originalSeat: 5 },
+  { justice: "thomas",    seatid: 1,  demJustice: 0, ideology:  0.5426272,  age: 77, originalSeat: 6 },
+  { justice: "barrett",   seatid: 3,  demJustice: 0, ideology:  0.4545732,  age: 53, originalSeat: 7 },
+  { justice: "roberts",   seatid: 4,  demJustice: 0, ideology:  0.6372294,  age: 70, originalSeat: 8 },
+  { justice: "alito",     seatid: 5,  demJustice: 0, ideology:  0.6505306,  age: 75, originalSeat: 9 },
+  // 4 packed Dem justices (appointed 2021, aged ~52 then, ~57 now)
   // Ideology values are representative draws from Beta(3,11) Dem distribution
-  { justice: "packed_1",  seatid: 10, demJustice: 1, ideology: -0.5714, age: 56, originalSeat: 10 },
-  { justice: "packed_2",  seatid: 11, demJustice: 1, ideology: -0.4286, age: 56, originalSeat: 11 },
-  { justice: "packed_3",  seatid: 12, demJustice: 1, ideology: -0.3571, age: 56, originalSeat: 12 },
-  { justice: "packed_4",  seatid: 13, demJustice: 1, ideology: -0.5000, age: 56, originalSeat: 13 },
+  { justice: "packed_1",  seatid: 10, demJustice: 1, ideology: -0.5714, age: 57, originalSeat: 10 },
+  { justice: "packed_2",  seatid: 11, demJustice: 1, ideology: -0.4286, age: 57, originalSeat: 11 },
+  { justice: "packed_3",  seatid: 12, demJustice: 1, ideology: -0.3571, age: 57, originalSeat: 12 },
+  { justice: "packed_4",  seatid: 13, demJustice: 1, ideology: -0.5000, age: 57, originalSeat: 13 },
 ];
 
 // ============================================================
@@ -315,16 +315,16 @@ const CF2016_PROBS = computeTransitionProbs(1948, 2017);
 // ============================================================
 const DEFAULT_PARAMS = {
   // Simulation setup
-  currentYear: 2025,
+  currentYear: 2026,
   endYear: 2100,
   numSims: 200,
 
   // Starting court
-  startingCourt: STARTING_COURT_2025,
-  startingDemPresident: STARTING_DEM_PRESIDENT_2025,
-  startingDemSenMaj: STARTING_DEM_SEN_MAJ_2025,
-  startingUnifiedGov: STARTING_UNIFIED_GOV_2025,
-  presidentHistoryInit: PRESIDENT_HISTORY_INIT_2025,
+  startingCourt: STARTING_COURT_2026,
+  startingDemPresident: STARTING_DEM_PRESIDENT_2026,
+  startingDemSenMaj: STARTING_DEM_SEN_MAJ_2026,
+  startingUnifiedGov: STARTING_UNIFIED_GOV_2026,
+  presidentHistoryInit: PRESIDENT_HISTORY_INIT_2026,
 
   // Presidential election probabilities
   probDemPDD: BASELINE_PROBS.probDemPDD,
@@ -360,7 +360,7 @@ const DEFAULT_PARAMS = {
 
   // Court packing
   courtPackN: 0,
-  courtPackingStartYear: 2025,
+  courtPackingStartYear: 2026,
   courtPackingParty: 1, // 1=Dem only, 0=Rep only, -1=either (first unified gov)
 
   // Term limits experiment
