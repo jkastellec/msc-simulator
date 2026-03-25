@@ -33,7 +33,7 @@ function getChartDefaults() {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#e0e0e0', font: { size: 11 } },
+        labels: { color: '#e0e0e0', font: { size: 11 }, usePointStyle: true, pointStyle: 'line' },
       },
       tooltip: {
         backgroundColor: '#1a1a2e',
