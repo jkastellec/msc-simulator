@@ -62,16 +62,16 @@ const EXPERIMENTS = {
     description: 'Senate map favors Republicans due to geographic clustering of Democratic voters.',
     pipeline: 'noDGConfirmations',
     params: {
-      // Increase Dem switch probs by +0.10 (harder for Dems to hold Senate)
-      demUniPres: BASELINE_PROBS.switchUniPres + 0.10,
-      demDivPres: BASELINE_PROBS.switchDivPres + 0.10,
-      demUniMid:  BASELINE_PROBS.switchUniMid  + 0.10,
-      demDivMid:  BASELINE_PROBS.switchDivMid  + 0.10,
-      // Decrease Rep switch probs by -0.10 (easier for Reps to hold Senate)
-      repUniPres: BASELINE_PROBS.switchUniPres - 0.10,
-      repDivPres: BASELINE_PROBS.switchDivPres - 0.10,
-      repUniMid:  BASELINE_PROBS.switchUniMid  - 0.10,
-      repDivMid:  BASELINE_PROBS.switchDivMid  - 0.10,
+      // Increase Dem switch probs by +0.10 (harder for Dems to hold Senate), clamped to [0,1]
+      demUniPres: Math.min(1, Math.max(0, BASELINE_PROBS.switchUniPres + 0.10)),
+      demDivPres: Math.min(1, Math.max(0, BASELINE_PROBS.switchDivPres + 0.10)),
+      demUniMid:  Math.min(1, Math.max(0, BASELINE_PROBS.switchUniMid  + 0.10)),
+      demDivMid:  Math.min(1, Math.max(0, BASELINE_PROBS.switchDivMid  + 0.10)),
+      // Decrease Rep switch probs by -0.10 (easier for Reps to hold Senate), clamped to [0,1]
+      repUniPres: Math.min(1, Math.max(0, BASELINE_PROBS.switchUniPres - 0.10)),
+      repDivPres: Math.min(1, Math.max(0, BASELINE_PROBS.switchDivPres - 0.10)),
+      repUniMid:  Math.min(1, Math.max(0, BASELINE_PROBS.switchUniMid  - 0.10)),
+      repDivMid:  Math.min(1, Math.max(0, BASELINE_PROBS.switchDivMid  - 0.10)),
     },
   },
 

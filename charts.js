@@ -14,7 +14,8 @@ const CHART_COLORS = {
 
 const EXPERIMENT_COLORS = [
   '#64ffda', '#ff6b6b', '#ffd93d', '#6bcb77',
-  '#4d96ff', '#ff922b', '#cc5de8',
+  '#4d96ff', '#ff922b', '#cc5de8', '#20c997',
+  '#e599f7', '#ffa94d',
 ];
 
 // Global chart instances
@@ -163,6 +164,17 @@ function renderDemSeatsBoxplot(canvasId, result) {
 
   if (decadeYears.length === 0) return;
 
+  // Find max seats across all decades to set dynamic majority threshold and y-axis
+  let maxSeats = 9;
+  decadeYears.forEach(yr => {
+    const dist = agg.demSeatsDistribution[yr];
+    if (dist) {
+      const m = Math.max(...dist);
+      if (m > maxSeats) maxSeats = m;
+    }
+  });
+  const majorityThreshold = Math.ceil(maxSeats / 2);
+
   const labels = decadeYears.map(yr => `${yr}s`);
   const boxplotData = [];
   const backgroundColors = [];
@@ -195,7 +207,7 @@ function renderDemSeatsBoxplot(canvasId, result) {
       max: whiskerHigh,
     });
 
-    const color = median >= 5 ? CHART_COLORS.dem : CHART_COLORS.rep;
+    const color = median >= majorityThreshold ? CHART_COLORS.dem : CHART_COLORS.rep;
     backgroundColors.push(color + '60');
     borderColors.push(color);
   });
@@ -230,7 +242,7 @@ function renderDemSeatsBoxplot(canvasId, result) {
           ...defaults.scales.y,
           title: { display: true, text: 'Dem-Appointed Seats', color: '#a0a0b0' },
           suggestedMin: 0,
-          suggestedMax: 9,
+          suggestedMax: Math.max(9, maxSeats) + 1,
         },
       },
     },

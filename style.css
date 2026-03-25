@@ -376,6 +376,31 @@ button.export-btn:hover {
   }
 }
 
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  header h1 {
+    text-align: center;
+  }
+  .header-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  button.run-btn {
+    width: 100%;
+    padding: 8px;
+  }
+  button.about-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* About button */
 button.about-btn {
   background: transparent;
