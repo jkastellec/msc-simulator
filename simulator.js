@@ -867,14 +867,22 @@ function aggregateTitForTat(nSeatsResults, params) {
   const nSims = nSeatsResults.length;
 
   const nSeatsMean = new Array(nYears).fill(0);
+  const nSeatsP025 = new Array(nYears).fill(0);
+  const nSeatsP975 = new Array(nYears).fill(0);
+
   for (let i = 0; i < nYears; i++) {
+    const vals = [];
     for (let s = 0; s < nSims; s++) {
       nSeatsMean[i] += nSeatsResults[s][i];
+      vals.push(nSeatsResults[s][i]);
     }
     nSeatsMean[i] /= nSims;
+    vals.sort((a, b) => a - b);
+    nSeatsP025[i] = vals[Math.max(0, Math.floor(nSims * 0.025))];
+    nSeatsP975[i] = vals[Math.min(nSims - 1, Math.floor(nSims * 0.975))];
   }
 
-  return { years, nSeatsMean };
+  return { years, nSeatsMean, nSeatsP025, nSeatsP975 };
 }
 
 // ============================================================
@@ -925,7 +933,10 @@ function runExperiment(experimentType, userParams) {
   const agg = aggregateSimulations(results, params);
 
   if (experimentType === 'titForTat') {
-    agg.nSeatsMean = aggregateTitForTat(nSeatsResults, params).nSeatsMean;
+    const tftAgg = aggregateTitForTat(nSeatsResults, params);
+    agg.nSeatsMean = tftAgg.nSeatsMean;
+    agg.nSeatsP025 = tftAgg.nSeatsP025;
+    agg.nSeatsP975 = tftAgg.nSeatsP975;
   }
 
   return { results, aggregated: agg, params };
@@ -985,7 +996,10 @@ async function runExperimentAsync(experimentType, userParams, onProgress) {
 
   const agg = aggregateSimulations(results, params);
   if (experimentType === 'titForTat') {
-    agg.nSeatsMean = aggregateTitForTat(nSeatsResults, params).nSeatsMean;
+    const tftAgg = aggregateTitForTat(nSeatsResults, params);
+    agg.nSeatsMean = tftAgg.nSeatsMean;
+    agg.nSeatsP025 = tftAgg.nSeatsP025;
+    agg.nSeatsP975 = tftAgg.nSeatsP975;
   }
 
   return { results, aggregated: agg, params };

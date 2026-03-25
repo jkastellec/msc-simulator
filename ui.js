@@ -312,8 +312,18 @@ function updateCharts() {
   // Chart 4: Branch control (primary experiment)
   renderBranchControlChart('chart-branches', primaryResult);
 
-  // Chart 5: Dem seats comparison
-  renderDemSeatsMeanChart('chart-dem-seats', resultsList, names);
+  // Chart 5: Dem seats comparison (exclude tit-for-tat since growing court makes metric misleading)
+  const demSeatsResults = [];
+  const demSeatsNames = [];
+  selectedExperiments.forEach(id => {
+    if (id !== 'titForTat' && simulationResults[id]) {
+      demSeatsResults.push(simulationResults[id]);
+      demSeatsNames.push(EXPERIMENTS[id].label);
+    }
+  });
+  if (demSeatsResults.length > 0) {
+    renderDemSeatsMeanChart('chart-dem-seats', demSeatsResults, demSeatsNames);
+  }
 
   // Chart 6: Tit-for-tat seat count (show/hide card based on whether tit-for-tat was run)
   const seatsCard = document.getElementById('chart-seats-card');

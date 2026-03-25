@@ -414,24 +414,61 @@ function renderSeatCountChart(canvasId, result) {
 
   if (!agg.nSeatsMean) return;
 
+  const datasets = [
+    {
+      label: 'Mean Court Size',
+      data: agg.years.map((yr, i) => ({ x: yr, y: agg.nSeatsMean[i] })),
+      borderColor: '#ff922b',
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      pointStyle: 'line',
+      pointRadius: 0,
+      tension: 0.3,
+    },
+  ];
+
+  // Add CI band if available
+  if (agg.nSeatsP975 && agg.nSeatsP025) {
+    datasets.push({
+      label: '95% CI',
+      data: agg.years.map((yr, i) => ({ x: yr, y: agg.nSeatsP975[i] })),
+      borderColor: 'rgba(255, 146, 43, 0.3)',
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderDash: [3, 3],
+      pointStyle: 'line',
+      pointRadius: 0,
+      fill: false,
+    });
+    datasets.push({
+      label: '_ci_lower',
+      data: agg.years.map((yr, i) => ({ x: yr, y: agg.nSeatsP025[i] })),
+      borderColor: 'rgba(255, 146, 43, 0.3)',
+      backgroundColor: 'rgba(255, 146, 43, 0.12)',
+      borderWidth: 1,
+      borderDash: [3, 3],
+      pointStyle: 'line',
+      pointRadius: 0,
+      fill: '-1',
+    });
+  }
+
   const defaults = getChartDefaults();
   charts[canvasId] = new Chart(ctx, {
     type: 'line',
-    data: {
-      datasets: [{
-        label: 'Expected Court Size',
-        data: agg.years.map((yr, i) => ({ x: yr, y: agg.nSeatsMean[i] })),
-        borderColor: '#ff922b',
-        backgroundColor: 'rgba(255, 146, 43, 0.15)',
-        borderWidth: 2,
-        pointStyle: 'line',
-        pointRadius: 0,
-        fill: true,
-        tension: 0.3,
-      }],
-    },
+    data: { datasets },
     options: {
       ...defaults,
+      plugins: {
+        ...defaults.plugins,
+        legend: {
+          ...defaults.plugins.legend,
+          labels: {
+            ...defaults.plugins.legend.labels,
+            filter: (item) => !item.text.startsWith('_'),
+          },
+        },
+      },
       scales: {
         ...defaults.scales,
         x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
