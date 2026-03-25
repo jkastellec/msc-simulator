@@ -155,10 +155,9 @@ function renderDemSeatsBoxplot(canvasId, result) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   const agg = result.aggregated;
 
-  // Collect decade years (2020, 2030, 2040, ... 2090)
+  // Collect decade keys (2020, 2030, 2040, ... 2090)
   const decadeYears = Object.keys(agg.demSeatsDistribution)
     .map(Number)
-    .filter(yr => yr % 10 === 0 && yr >= 2020)
     .sort();
 
   if (decadeYears.length === 0) return;
@@ -221,12 +220,9 @@ function renderDemSeatsBoxplot(canvasId, result) {
       scales: {
         ...defaults.scales,
         x: {
-          ...defaults.scales.x,
           type: 'category',
-          ticks: {
-            ...defaults.scales.x.ticks,
-            callback: undefined,
-          },
+          ticks: { color: '#a0a0b0', font: { size: 10 } },
+          grid: { color: 'rgba(255,255,255,0.05)' },
           title: { display: true, text: 'Decade', color: '#a0a0b0' },
         },
         y: {

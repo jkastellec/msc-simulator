@@ -847,11 +847,14 @@ function aggregateSimulations(results, params) {
     agg.blocModerate[i] /= nSims;
     agg.blocConservative[i] /= nSims;
 
-    // Store full distribution for histogram years
+    // Store full distribution keyed by decade start (e.g., 2026 -> 2020, 2035 -> 2030)
     const year = years[i];
-    if (year % 10 === 0 || year === params.currentYear || year === params.endYear) {
-      agg.demSeatsDistribution[year] = demSeatsByYear[i];
+    const decadeKey = Math.floor(year / 10) * 10;
+    if (!agg.demSeatsDistribution[decadeKey]) {
+      agg.demSeatsDistribution[decadeKey] = [];
     }
+    // Append this year's per-sim dem seat counts to the decade bucket
+    agg.demSeatsDistribution[decadeKey].push(...demSeatsByYear[i]);
   }
 
   return agg;
