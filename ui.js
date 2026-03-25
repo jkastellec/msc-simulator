@@ -77,9 +77,10 @@ const PARAM_DEFS = [
       labelLeft: 'Moderate', labelRight: 'Very Conservative', type: 'ideology' },
   ]},
   { group: 'Retirement & Replacement', params: [
-    { key: 'weightStrategicRetirement', label: 'Strategic ret. weight', min: 0, max: 2, step: 0.1 },
-    { key: 'meanAge', label: 'New justice mean age', min: 40, max: 65, step: 1, type: 'number' },
-    { key: 'sdAge', label: 'New justice age SD', min: 1, max: 10, step: 0.5, type: 'number' },
+    { key: 'weightStrategicRetirement', label: 'Strategic retirement', min: 0, max: 1, step: 0.05,
+      labelLeft: 'None', labelRight: 'Full', type: 'labeled' },
+    { key: 'meanAge', label: 'New Justice Mean Age', min: 45, max: 62, step: 1 },
+    { key: 'sdAge', label: 'Age Variation (SD)', min: 1, max: 6, step: 0.5 },
   ]},
 ];
 
@@ -105,14 +106,18 @@ function renderAdvancedParams() {
       const row = document.createElement('div');
       row.className = 'param-row';
 
-      if (p.type === 'ideology' || p.type === 'senate') {
+      if (p.type === 'ideology' || p.type === 'senate' || p.type === 'labeled') {
         // Slider with labeled endpoints and value below
         let defaultMean;
         if (p.key === 'demIdeologyMean') defaultMean = -0.57;
         else if (p.key === 'repIdeologyMean') defaultMean = 0.57;
         else if (p.key === 'senateFlipUnified') defaultMean = 0.40;
         else if (p.key === 'senateFlipDivided') defaultMean = 0.18;
-        else defaultMean = defaultVal || (p.min + p.max) / 2;
+        else defaultMean = defaultVal !== undefined ? defaultVal : (p.min + p.max) / 2;
+
+        const valueLabel = p.type === 'senate' ? 'Flip probability'
+          : p.type === 'labeled' ? 'Value'
+          : 'Current mean';
 
         row.className = 'param-row ideology-row';
         row.innerHTML = `
@@ -122,7 +127,7 @@ function renderAdvancedParams() {
             <input type="range" id="param-${p.key}" value="${defaultMean}" min="${p.min}" max="${p.max}" step="${p.step}">
             <span class="ideology-label-right">${p.labelRight}</span>
           </div>
-          <div class="ideology-current-value">${p.type === 'senate' ? 'Flip probability' : 'Current mean'}: <span id="val-${p.key}">${defaultMean.toFixed(2)}</span></div>
+          <div class="ideology-current-value">${valueLabel}: <span id="val-${p.key}">${Number(defaultMean).toFixed(2)}</span></div>
         `;
         row.querySelector('input[type="range"]').addEventListener('input', (e) => {
           document.getElementById(`val-${p.key}`).textContent = Number(e.target.value).toFixed(2);
@@ -184,6 +189,8 @@ function getCustomParams() {
           params.repShape1 = shapes.shape1;
           params.repShape2 = shapes.shape2;
         }
+      } else if (p.type === 'labeled') {
+        params[p.key] = parseFloat(el.value);
       } else if (p.type === 'senate') {
         // Expand 2 simplified sliders into 8 symmetric senate switch params
         const val = parseFloat(el.value);
