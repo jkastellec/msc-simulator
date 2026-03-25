@@ -24,6 +24,7 @@
         <input type="number" id="end-year" value="2100" min="2030" max="2200" step="10">
       </label>
       <button class="run-btn" id="run-btn">Run Simulations</button>
+      <button class="about-btn" id="about-btn">About</button>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
       <span class="status-text" id="status-text">Ready</span>
     </div>
@@ -85,6 +86,96 @@
           <div style="height:250px;"><canvas id="chart-branches"></canvas></div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div class="modal-overlay" id="about-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>About the MSC Simulator</h2>
+        <button class="modal-close" id="about-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <section>
+          <h3>What is this?</h3>
+          <p>The MSC Simulator is an interactive tool for exploring how the ideological composition
+          of the U.S. Supreme Court may evolve over the coming decades. It uses Monte Carlo simulation
+          to model presidential elections, Senate control, justice retirements and deaths, and the
+          ideology of future nominees under different institutional scenarios.</p>
+        </section>
+
+        <section>
+          <h3>Credit</h3>
+          <p>Based on Cameron &amp; Kastellec, <em>The Making of the Supreme Court</em>
+          (Princeton University Press). The simulation methodology is described in Chapter 13,
+          "The Courts That Politics Will Make."</p>
+        </section>
+
+        <section>
+          <h3>Precision</h3>
+          <p>Browser results are approximate (default: 200 simulations). For publication-quality
+          results (1,000 simulations), see the
+          <a href="https://github.com/jkastell/replicate_MSC_sims" target="_blank">R replication package</a>.
+          The JavaScript engine is a faithful port of the R codebase, validated against R output
+          to within sampling error.</p>
+        </section>
+
+        <section>
+          <h3>Experiments</h3>
+          <dl>
+            <dt>Baseline</dt>
+            <dd>Standard model: elections, strategic retirement, and ideology drawn from calibrated
+            Beta distributions. Transition probabilities are estimated from 1948&ndash;2021 historical data.</dd>
+
+            <dt>No Strategic Retirement</dt>
+            <dd>Removes the strategic retirement boost. Justices exit only through death or
+            age-based basic retirement, regardless of whether the sitting president shares their
+            ideological alignment.</dd>
+
+            <dt>No Divided-Government Confirmations</dt>
+            <dd>When the president and Senate are from different parties, vacancies remain unfilled
+            until unified government is restored. Models a world where opposition Senates
+            systematically block nominees.</dd>
+
+            <dt>Court Packing (+4)</dt>
+            <dd>Four new seats are added to the Court at the first unified government on or after
+            2025. New justices are appointed by the president in power and behave normally
+            thereafter.</dd>
+
+            <dt>Term Limits (18 years)</dt>
+            <dd>Mandatory retirement after 18 years of service, with staggered onset beginning in
+            2025. Each seat transitions to the fixed-term system on a rolling schedule, ensuring
+            regular turnover every two years once fully phased in.</dd>
+
+            <dt>2016 Counterfactual</dt>
+            <dd>Simulates a world where Hillary Clinton won the 2016 election and Merrick Garland
+            was confirmed. Starts from a 5&ndash;4 liberal court in 2017 with transition
+            probabilities recalibrated to pre-2016 data.</dd>
+          </dl>
+        </section>
+
+        <section>
+          <h3>2025 Starting Court</h3>
+          <p>The simulation begins with the current Court as of January 2025:</p>
+          <table class="court-table">
+            <thead><tr><th>Justice</th><th>Age</th><th>Appointed by</th><th>Ideology (NSP)</th></tr></thead>
+            <tbody>
+              <tr class="conservative"><td>Thomas</td><td>76</td><td>R</td><td>+0.54</td></tr>
+              <tr class="conservative"><td>Alito</td><td>74</td><td>R</td><td>+0.65</td></tr>
+              <tr class="conservative"><td>Roberts</td><td>69</td><td>R</td><td>+0.64</td></tr>
+              <tr class="conservative"><td>Kavanaugh</td><td>59</td><td>R</td><td>+0.67</td></tr>
+              <tr class="conservative"><td>Gorsuch</td><td>57</td><td>R</td><td>+0.58</td></tr>
+              <tr class="conservative"><td>Barrett</td><td>52</td><td>R</td><td>+0.45</td></tr>
+              <tr class="liberal"><td>Sotomayor</td><td>70</td><td>D</td><td>&minus;0.30</td></tr>
+              <tr class="liberal"><td>Kagan</td><td>64</td><td>D</td><td>&minus;0.29</td></tr>
+              <tr class="liberal"><td>Jackson</td><td>54</td><td>D</td><td>&minus;0.32</td></tr>
+            </tbody>
+          </table>
+          <p class="note">NSP = Newspaper-based Scores for Prediction. Positive values indicate
+          conservative ideology; negative values indicate liberal ideology.</p>
+        </section>
       </div>
     </div>
   </div>

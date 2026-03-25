@@ -303,6 +303,168 @@ button.export-btn:hover {
   }
 }
 
+/* About button */
+button.about-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+button.about-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Modal overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal-overlay.visible {
+  display: flex;
+}
+
+.modal {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-width: 680px;
+  width: 100%;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg-panel);
+  z-index: 1;
+}
+
+.modal-header h2 {
+  font-size: 16px;
+  color: var(--accent);
+}
+
+button.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+button.modal-close:hover {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body section {
+  margin-bottom: 20px;
+}
+
+.modal-body section:last-child {
+  margin-bottom: 0;
+}
+
+.modal-body h3 {
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.modal-body p {
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.modal-body dl {
+  font-size: 13px;
+}
+
+.modal-body dt {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.modal-body dd {
+  color: var(--text-secondary);
+  margin-left: 0;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.modal-body a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.modal-body a:hover {
+  text-decoration: underline;
+}
+
+.modal-body .note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Court composition table */
+.court-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 8px 0;
+}
+
+.court-table th {
+  text-align: left;
+  padding: 6px 10px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.court-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.court-table tr.conservative td:first-child {
+  border-left: 3px solid var(--rep-color);
+}
+
+.court-table tr.liberal td:first-child {
+  border-left: 3px solid var(--dem-color);
+}
+
 .disclaimer {
   text-align: center;
   padding: 12px 16px;

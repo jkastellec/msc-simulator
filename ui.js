@@ -158,6 +158,23 @@ function setupEventListeners() {
   });
 
   document.getElementById('export-r-btn').addEventListener('click', exportToR);
+
+  // About modal
+  const aboutModal = document.getElementById('about-modal');
+  document.getElementById('about-btn').addEventListener('click', () => {
+    aboutModal.classList.add('visible');
+  });
+  document.getElementById('about-close').addEventListener('click', () => {
+    aboutModal.classList.remove('visible');
+  });
+  aboutModal.addEventListener('click', (e) => {
+    if (e.target === aboutModal) aboutModal.classList.remove('visible');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && aboutModal.classList.contains('visible')) {
+      aboutModal.classList.remove('visible');
+    }
+  });
 }
 
 // ============================================================

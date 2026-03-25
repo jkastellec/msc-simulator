@@ -45,7 +45,11 @@ function getChartDefaults() {
     },
     scales: {
       x: {
-        ticks: { color: '#a0a0b0', font: { size: 10 } },
+        ticks: {
+          color: '#a0a0b0',
+          font: { size: 10 },
+          callback: function(value) { return value.toString(); },
+        },
         grid: { color: 'rgba(255,255,255,0.05)' },
       },
       y: {
