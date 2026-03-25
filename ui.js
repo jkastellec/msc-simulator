@@ -106,7 +106,7 @@ function renderAdvancedParams() {
       row.className = 'param-row';
 
       if (p.type === 'ideology') {
-        // Ideology slider with labeled endpoints
+        // Ideology slider with labeled endpoints and value below
         const defaultMean = p.key === 'demIdeologyMean' ? -0.57 : 0.57;
         row.className = 'param-row ideology-row';
         row.innerHTML = `
@@ -116,7 +116,7 @@ function renderAdvancedParams() {
             <input type="range" id="param-${p.key}" value="${defaultMean}" min="${p.min}" max="${p.max}" step="${p.step}">
             <span class="ideology-label-right">${p.labelRight}</span>
           </div>
-          <span class="param-value" id="val-${p.key}">${defaultMean.toFixed(2)}</span>
+          <div class="ideology-current-value">Current mean: <span id="val-${p.key}">${defaultMean.toFixed(2)}</span></div>
         `;
         row.querySelector('input[type="range"]').addEventListener('input', (e) => {
           document.getElementById(`val-${p.key}`).textContent = Number(e.target.value).toFixed(2);
