@@ -305,6 +305,8 @@ function updateCharts() {
   const ideoNames = ideoIds.map(id => EXPERIMENTS[id].label);
   if (ideoResults.length > 0) {
     renderMedianIdeologyChart('chart-ideology', ideoResults, ideoNames);
+  } else {
+    destroyChart('chart-ideology');
   }
 
   // Chart 2: Dem seats box plot by decade (primary experiment)
@@ -323,13 +325,15 @@ function updateCharts() {
   const demSeatsNames = demSeatsIds.map(id => EXPERIMENTS[id].label);
   if (demSeatsResults.length > 0) {
     renderDemSeatsMeanChart('chart-dem-seats', demSeatsResults, demSeatsNames);
+  } else {
+    destroyChart('chart-dem-seats');
   }
 
   // Chart 6: Tit-for-tat seat count (show/hide card based on whether tit-for-tat was run)
   const seatsCard = document.getElementById('chart-seats-card');
   const titForTatResult = simulationResults['titForTat'];
   if (titForTatResult && titForTatResult.aggregated.nSeatsMean) {
-    seatsCard.style.display = '';
+    seatsCard.style.display = 'block';
     renderSeatCountChart('chart-seats', titForTatResult);
   } else {
     seatsCard.style.display = 'none';
