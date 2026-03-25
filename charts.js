@@ -158,6 +158,7 @@ function renderDemSeatsBoxplot(canvasId, result) {
   // Collect decade keys (2020, 2030, 2040, ... 2090)
   const decadeYears = Object.keys(agg.demSeatsDistribution)
     .map(Number)
+    .filter(yr => yr >= 2020 && yr < 2100)
     .sort();
 
   if (decadeYears.length === 0) return;

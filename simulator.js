@@ -636,18 +636,6 @@ function titForTat(sim, params) {
     }
   }
 
-  // Debug: log first sim's seat trajectory
-  if (typeof window !== 'undefined' && !titForTat._logged) {
-    console.log('Tit-for-tat nSeats (first sim):', JSON.stringify(nSeats.slice(0, 20)));
-    console.log('Tit-for-tat final seats:', nSeats[nSeats.length - 1]);
-    const packYears = [];
-    for (let ii = 1; ii < nYears; ii++) {
-      if (nSeats[ii] > nSeats[ii - 1]) packYears.push(sim.years[ii]);
-    }
-    console.log('Packing years:', packYears);
-    titForTat._logged = true;
-  }
-
   return nSeats;
 }
 

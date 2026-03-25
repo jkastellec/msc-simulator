@@ -323,10 +323,13 @@ function updateCharts() {
   const demSeatsIds = selectedExperiments.filter(id => id !== 'titForTat' && simulationResults[id]);
   const demSeatsResults = demSeatsIds.map(id => simulationResults[id]);
   const demSeatsNames = demSeatsIds.map(id => EXPERIMENTS[id].label);
+  const demSeatsPlaceholder = document.getElementById('chart-dem-seats-placeholder');
   if (demSeatsResults.length > 0) {
+    demSeatsPlaceholder.classList.add('hidden');
     renderDemSeatsMeanChart('chart-dem-seats', demSeatsResults, demSeatsNames);
   } else {
     destroyChart('chart-dem-seats');
+    demSeatsPlaceholder.classList.remove('hidden');
   }
 
   // Chart 6: Tit-for-tat seat count (show/hide card based on whether tit-for-tat was run)
