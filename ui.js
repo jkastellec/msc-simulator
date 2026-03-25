@@ -314,7 +314,8 @@ function updateCharts() {
   renderDemSeatsBoxplot('chart-boxplot', primaryResult);
 
   // Chart 3: Bloc composition (primary experiment)
-  renderBlocChart('chart-blocs', primaryResult);
+  const primaryName = names.length > 1 ? names[0] : '';
+  renderBlocChart('chart-blocs', primaryResult, primaryName);
 
   // Chart 4: Branch control (primary experiment)
   renderBranchControlChart('chart-branches', primaryResult);

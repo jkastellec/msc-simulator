@@ -252,45 +252,43 @@ function renderDemSeatsBoxplot(canvasId, result) {
 // ============================================================
 // CHART 3: Bloc Composition Over Time
 // ============================================================
-function renderBlocChart(canvasId, result) {
+function renderBlocChart(canvasId, result, expName) {
   destroyChart(canvasId);
   const ctx = document.getElementById(canvasId).getContext('2d');
   const agg = result.aggregated;
   const defaults = getChartDefaults();
+  const suffix = expName ? ` (${expName})` : '';
 
   charts[canvasId] = new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [
         {
-          label: 'Liberal (< -0.2)',
+          label: 'Liberal' + suffix,
           data: agg.years.map((yr, i) => ({ x: yr, y: agg.blocLiberal[i] })),
-          backgroundColor: CHART_COLORS.liberal + '40',
           borderColor: CHART_COLORS.liberal,
-          borderWidth: 1.5,
-          fill: true,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
           pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
         {
-          label: 'Moderate',
+          label: 'Moderate' + suffix,
           data: agg.years.map((yr, i) => ({ x: yr, y: agg.blocModerate[i] })),
-          backgroundColor: CHART_COLORS.moderate + '40',
           borderColor: CHART_COLORS.moderate,
-          borderWidth: 1.5,
-          fill: true,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
           pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
         {
-          label: 'Conservative (> 0.2)',
+          label: 'Conservative' + suffix,
           data: agg.years.map((yr, i) => ({ x: yr, y: agg.blocConservative[i] })),
-          backgroundColor: CHART_COLORS.conservative + '40',
           borderColor: CHART_COLORS.conservative,
-          borderWidth: 1.5,
-          fill: true,
+          backgroundColor: 'transparent',
+          borderWidth: 2,
           pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
@@ -302,10 +300,7 @@ function renderBlocChart(canvasId, result) {
       scales: {
         ...defaults.scales,
         x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
-        y: { ...defaults.scales.y, stacked: true, title: { display: true, text: 'Mean Justices', color: '#a0a0b0' } },
-      },
-      plugins: {
-        ...defaults.plugins,
+        y: { ...defaults.scales.y, min: 0, suggestedMax: 9, title: { display: true, text: 'Mean Justices', color: '#a0a0b0' } },
       },
     },
   });
