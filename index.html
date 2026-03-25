@@ -84,6 +84,11 @@
           <div style="height:250px;"><canvas id="chart-branches"></canvas></div>
         </div>
 
+        <div class="chart-card" id="chart-seats-card" style="display:none;">
+          <h3>Expected Court Size (Tit-for-Tat)</h3>
+          <div style="height:250px;"><canvas id="chart-seats"></canvas></div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -137,15 +142,29 @@
             until unified government is restored. Models a world where opposition Senates
             systematically block nominees.</dd>
 
+            <dt>GOP Senate Advantage</dt>
+            <dd>Senate control probabilities are shifted to favor Republicans (+0.10 to Dem switch
+            rates, &minus;0.10 to Rep switch rates), reflecting geographic clustering of
+            Democratic voters. Vacancies persist until unified government.</dd>
+
             <dt>Court Packing (+4)</dt>
             <dd>Four new seats are added to the Court at the first unified government on or after
             2026. New justices are appointed by the president in power and behave normally
             thereafter.</dd>
 
+            <dt>Tit-for-Tat Court Packing</dt>
+            <dd>Each party adds 2 seats when it gains unified government from the other party,
+            leading to an ever-expanding court. A dedicated chart shows expected court size
+            over time.</dd>
+
             <dt>Term Limits (18 years)</dt>
             <dd>Mandatory retirement after 18 years of service, with staggered onset beginning in
             2026. Each seat transitions to the fixed-term system on a rolling schedule, ensuring
             regular turnover every two years once fully phased in.</dd>
+
+            <dt>Term Limits (9 years)</dt>
+            <dd>Mandatory 9-year terms, staggered by seniority with 1-year spacing. Each president
+            appoints approximately 4 justices per term, producing rapid turnover.</dd>
 
             <dt>2016 Counterfactual</dt>
             <dd>Simulates a world where Hillary Clinton won the 2016 election and Merrick Garland

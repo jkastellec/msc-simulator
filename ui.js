@@ -294,6 +294,17 @@ function updateCharts() {
 
   // Chart 5: Dem seats comparison
   renderDemSeatsMeanChart('chart-dem-seats', resultsList, names);
+
+  // Chart 6: Tit-for-tat seat count (show/hide card based on whether tit-for-tat was run)
+  const seatsCard = document.getElementById('chart-seats-card');
+  const titForTatResult = simulationResults['titForTat'];
+  if (titForTatResult && titForTatResult.aggregated.nSeatsMean) {
+    seatsCard.style.display = '';
+    renderSeatCountChart('chart-seats', titForTatResult);
+  } else {
+    seatsCard.style.display = 'none';
+    destroyChart('chart-seats');
+  }
 }
 
 // ============================================================

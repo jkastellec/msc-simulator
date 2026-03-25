@@ -408,3 +408,40 @@ function renderDemSeatsMeanChart(canvasId, results, experimentNames) {
     },
   });
 }
+
+// ============================================================
+// CHART 6: Expected Court Size (Tit-for-Tat)
+// ============================================================
+function renderSeatCountChart(canvasId, result) {
+  destroyChart(canvasId);
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const agg = result.aggregated;
+
+  if (!agg.nSeatsMean) return;
+
+  const defaults = getChartDefaults();
+  charts[canvasId] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Expected Court Size',
+        data: agg.years.map((yr, i) => ({ x: yr, y: agg.nSeatsMean[i] })),
+        borderColor: '#ff922b',
+        backgroundColor: 'rgba(255, 146, 43, 0.15)',
+        borderWidth: 2,
+        pointStyle: 'line',
+        pointRadius: 0,
+        fill: true,
+        tension: 0.3,
+      }],
+    },
+    options: {
+      ...defaults,
+      scales: {
+        ...defaults.scales,
+        x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
+        y: { ...defaults.scales.y, suggestedMin: 9, title: { display: true, text: 'Number of Seats', color: '#a0a0b0' } },
+      },
+    },
+  });
+}
