@@ -140,7 +140,7 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
       },
       scales: {
         ...defaults.scales,
-        x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
+        x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
         y: { ...defaults.scales.y, min: -1, max: 1, title: { display: true, text: 'Conservatism of Median Justice', color: '#a0a0b0' } },
       },
     },
@@ -288,7 +288,7 @@ function renderBlocChart(canvasId, result) {
       ...defaults,
       scales: {
         ...defaults.scales,
-        x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
+        x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
         y: { ...defaults.scales.y, stacked: true, title: { display: true, text: 'Mean Justices', color: '#a0a0b0' } },
       },
       plugins: {
@@ -345,7 +345,7 @@ function renderBranchControlChart(canvasId, result) {
       ...defaults,
       scales: {
         ...defaults.scales,
-        x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
+        x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
         y: { ...defaults.scales.y, min: 0, max: 1, title: { display: true, text: 'Probability', color: '#a0a0b0' } },
       },
       plugins: {
@@ -397,7 +397,7 @@ function renderDemSeatsMeanChart(canvasId, results, experimentNames) {
       ...defaults,
       scales: {
         ...defaults.scales,
-        x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
+        x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
         y: { ...defaults.scales.y, title: { display: true, text: 'Mean Dem-Appointed Seats', color: '#a0a0b0' } },
       },
     },
@@ -471,7 +471,7 @@ function renderSeatCountChart(canvasId, result) {
       },
       scales: {
         ...defaults.scales,
-        x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
+        x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
         y: { ...defaults.scales.y, suggestedMin: 9, title: { display: true, text: 'Number of Seats', color: '#a0a0b0' } },
       },
     },
