@@ -149,14 +149,6 @@ function getCustomParams() {
 function setupEventListeners() {
   document.getElementById('run-btn').addEventListener('click', runSimulations);
 
-  document.getElementById('histogram-year').addEventListener('change', (e) => {
-    const year = parseInt(e.target.value);
-    const primaryId = selectedExperiments[0];
-    if (simulationResults[primaryId]) {
-      renderDemSeatsHistogram('chart-histogram', simulationResults[primaryId], year);
-    }
-  });
-
   document.getElementById('export-r-btn').addEventListener('click', exportToR);
 
   // About modal
@@ -246,15 +238,9 @@ function updateCharts() {
   // Chart 1: Median ideology comparison
   renderMedianIdeologyChart('chart-ideology', resultsList, names);
 
-  // Chart 2: Dem seats histogram (primary experiment)
+  // Chart 2: Dem seats box plot by decade (primary experiment)
   const primaryResult = resultsList[0];
-  const histYearSelect = document.getElementById('histogram-year');
-  const availableYears = Object.keys(primaryResult.aggregated.demSeatsDistribution).map(Number).sort();
-  histYearSelect.innerHTML = availableYears.map(yr =>
-    `<option value="${yr}" ${yr === 2050 ? 'selected' : ''}>${yr}</option>`
-  ).join('');
-  const selectedYear = parseInt(histYearSelect.value) || availableYears[Math.floor(availableYears.length / 2)];
-  renderDemSeatsHistogram('chart-histogram', primaryResult, selectedYear);
+  renderDemSeatsBoxplot('chart-boxplot', primaryResult);
 
   // Chart 3: Bloc composition (primary experiment)
   renderBlocChart('chart-blocs', primaryResult);

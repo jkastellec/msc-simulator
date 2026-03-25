@@ -145,35 +145,71 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
 }
 
 // ============================================================
-// CHART 2: Dem Seat Count Histogram
+// CHART 2: Dem Seat Count Box Plot by Decade
 // ============================================================
-function renderDemSeatsHistogram(canvasId, result, year) {
+function renderDemSeatsBoxplot(canvasId, result) {
   destroyChart(canvasId);
   const ctx = document.getElementById(canvasId).getContext('2d');
   const agg = result.aggregated;
 
-  const dist = agg.demSeatsDistribution[year];
-  if (!dist) return;
+  // Collect decade years (2030, 2040, ... 2090)
+  const decadeYears = Object.keys(agg.demSeatsDistribution)
+    .map(Number)
+    .filter(yr => yr % 10 === 0 && yr >= 2030)
+    .sort();
 
-  // Count frequencies
-  const maxSeats = Math.max(...dist) + 1;
-  const counts = new Array(maxSeats + 1).fill(0);
-  dist.forEach(v => { if (v >= 0 && v <= maxSeats) counts[v]++; });
+  if (decadeYears.length === 0) return;
 
-  const labels = Array.from({ length: maxSeats + 1 }, (_, i) => i);
-  const colors = labels.map(n => n > maxSeats / 2 ? CHART_COLORS.dem : CHART_COLORS.rep);
+  const labels = decadeYears.map(yr => `${yr}s`);
+  const boxplotData = [];
+  const backgroundColors = [];
+  const borderColors = [];
+
+  decadeYears.forEach(yr => {
+    const dist = agg.demSeatsDistribution[yr];
+    if (!dist || dist.length === 0) {
+      boxplotData.push({ min: 0, q1: 0, median: 0, q3: 0, max: 0 });
+      backgroundColors.push(CHART_COLORS.rep + '60');
+      borderColors.push(CHART_COLORS.rep);
+      return;
+    }
+
+    const sorted = [...dist].sort((a, b) => a - b);
+    const n = sorted.length;
+    const percentile = (p) => sorted[Math.min(n - 1, Math.max(0, Math.floor(n * p)))];
+
+    const median = percentile(0.5);
+    const q1 = percentile(0.25);
+    const q3 = percentile(0.75);
+    const whiskerLow = percentile(0.05);
+    const whiskerHigh = percentile(0.95);
+
+    boxplotData.push({
+      min: whiskerLow,
+      q1: q1,
+      median: median,
+      q3: q3,
+      max: whiskerHigh,
+    });
+
+    const color = median >= 5 ? CHART_COLORS.dem : CHART_COLORS.rep;
+    backgroundColors.push(color + '60');
+    borderColors.push(color);
+  });
 
   const defaults = getChartDefaults();
   charts[canvasId] = new Chart(ctx, {
-    type: 'bar',
+    type: 'boxplot',
     data: {
       labels,
       datasets: [{
-        label: 'Simulations',
-        data: counts,
-        backgroundColor: colors.map(c => c + '99'),
-        borderColor: colors,
-        borderWidth: 1,
+        label: 'Dem-Appointed Seats',
+        data: boxplotData,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1.5,
+        medianColor: '#e0e0e0',
+        itemRadius: 0,
       }],
     },
     options: {
@@ -181,8 +217,16 @@ function renderDemSeatsHistogram(canvasId, result, year) {
       plugins: { ...defaults.plugins, legend: { display: false } },
       scales: {
         ...defaults.scales,
-        x: { ...defaults.scales.x, title: { display: true, text: 'Dem-Appointed Seats', color: '#a0a0b0' } },
-        y: { ...defaults.scales.y, title: { display: true, text: 'Count', color: '#a0a0b0' } },
+        x: {
+          ...defaults.scales.x,
+          title: { display: true, text: 'Decade', color: '#a0a0b0' },
+        },
+        y: {
+          ...defaults.scales.y,
+          title: { display: true, text: 'Dem-Appointed Seats', color: '#a0a0b0' },
+          suggestedMin: 0,
+          suggestedMax: 9,
+        },
       },
     },
   });

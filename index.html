@@ -6,6 +6,7 @@
   <title>MSC Simulator — Supreme Court Composition</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot@4"></script>
 </head>
 <body>
 
@@ -69,11 +70,8 @@
         </div>
 
         <div class="chart-card">
-          <h3>Dem Seat Count Distribution</h3>
-          <div style="height:250px;"><canvas id="chart-histogram"></canvas></div>
-          <div class="chart-controls">
-            <label>Year: <select id="histogram-year"><option value="2050">2050</option></select></label>
-          </div>
+          <h3>Dem Seat Count by Decade</h3>
+          <div style="height:250px;"><canvas id="chart-boxplot"></canvas></div>
         </div>
 
         <div class="chart-card">
