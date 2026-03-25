@@ -625,18 +625,27 @@ function titForTat(sim, params) {
   const k = startYear - params.currentYear;
 
   const nSeats = new Array(nYears).fill(9);
+  // Track Dem-appointed seats from packing (baseline justice tracking handles the original 9)
+  const packedDemSeats = new Array(nYears).fill(0);
   let presSide = -1;
 
   for (let i = Math.max(k, 1); i < nYears; i++) {
     if (sim.unifiedGov[i - 1] === 1 && sim.demPresident[i - 1] !== presSide) {
       presSide = sim.demPresident[i - 1];
       nSeats[i] = nSeats[i - 1] + n;
+      // New seats go to the packing president's party
+      if (presSide === 1) {
+        packedDemSeats[i] = packedDemSeats[i - 1] + n;
+      } else {
+        packedDemSeats[i] = packedDemSeats[i - 1];
+      }
     } else {
       nSeats[i] = nSeats[i - 1];
+      packedDemSeats[i] = packedDemSeats[i - 1];
     }
   }
 
-  return nSeats;
+  return { nSeats, packedDemSeats };
 }
 
 // ============================================================
@@ -736,8 +745,7 @@ function runCourtPackingPipeline(sim, params) {
 }
 
 function runTitForTatPipeline(sim, params) {
-  predictPresident(sim, params);
-  predictSenate(sim, params);
+  runBaselinePipeline(sim, params);
   return titForTat(sim, params);
 }
 
@@ -860,29 +868,47 @@ function aggregateSimulations(results, params) {
   return agg;
 }
 
-// Aggregate tit-for-tat results (array of nSeats arrays)
-function aggregateTitForTat(nSeatsResults, params) {
+// Aggregate tit-for-tat results
+// nSeatsResults: array of {nSeats, packedDemSeats} per sim
+// simResults: array of sim objects (for baseline demJustice counts)
+function aggregateTitForTat(nSeatsResults, simResults, params) {
   const nYears = params.endYear - params.currentYear + 1;
-  const years = Array.from({ length: nYears }, (_, i) => params.currentYear + i);
   const nSims = nSeatsResults.length;
 
   const nSeatsMean = new Array(nYears).fill(0);
   const nSeatsP025 = new Array(nYears).fill(0);
   const nSeatsP975 = new Array(nYears).fill(0);
+  const tftDemSeatsMean = new Array(nYears).fill(0);
+  const tftDemShareMean = new Array(nYears).fill(0);
 
   for (let i = 0; i < nYears; i++) {
-    const vals = [];
+    const seatVals = [];
     for (let s = 0; s < nSims; s++) {
-      nSeatsMean[i] += nSeatsResults[s][i];
-      vals.push(nSeatsResults[s][i]);
+      const totalSeats = nSeatsResults[s].nSeats[i];
+      const packedDem = nSeatsResults[s].packedDemSeats[i];
+
+      // Count dem seats from the baseline 9 justices
+      let baselineDem = 0;
+      const sim = simResults[s];
+      for (let j = 0; j < Math.min(9, sim.numJustices); j++) {
+        if (sim.justices[j].demJustice[i] === 1) baselineDem++;
+      }
+
+      const totalDem = baselineDem + packedDem;
+      nSeatsMean[i] += totalSeats;
+      tftDemSeatsMean[i] += totalDem;
+      tftDemShareMean[i] += totalSeats > 0 ? totalDem / totalSeats : 0;
+      seatVals.push(totalSeats);
     }
     nSeatsMean[i] /= nSims;
-    vals.sort((a, b) => a - b);
-    nSeatsP025[i] = vals[Math.max(0, Math.floor(nSims * 0.025))];
-    nSeatsP975[i] = vals[Math.min(nSims - 1, Math.floor(nSims * 0.975))];
+    tftDemSeatsMean[i] /= nSims;
+    tftDemShareMean[i] /= nSims;
+    seatVals.sort((a, b) => a - b);
+    nSeatsP025[i] = seatVals[Math.max(0, Math.floor(nSims * 0.025))];
+    nSeatsP975[i] = seatVals[Math.min(nSims - 1, Math.floor(nSims * 0.975))];
   }
 
-  return { years, nSeatsMean, nSeatsP025, nSeatsP975 };
+  return { nSeatsMean, nSeatsP025, nSeatsP975, tftDemSeatsMean, tftDemShareMean };
 }
 
 // ============================================================
@@ -913,8 +939,8 @@ function runExperiment(experimentType, userParams) {
         break;
       case 'titForTat': {
         runBaselinePipeline(sim, params);
-        const nSeats = titForTat(sim, params);
-        nSeatsResults.push(nSeats);
+        const tft = titForTat(sim, params);
+        nSeatsResults.push(tft);
         break;
       }
       case 'termLimits':
@@ -933,10 +959,8 @@ function runExperiment(experimentType, userParams) {
   const agg = aggregateSimulations(results, params);
 
   if (experimentType === 'titForTat') {
-    const tftAgg = aggregateTitForTat(nSeatsResults, params);
-    agg.nSeatsMean = tftAgg.nSeatsMean;
-    agg.nSeatsP025 = tftAgg.nSeatsP025;
-    agg.nSeatsP975 = tftAgg.nSeatsP975;
+    const tftAgg = aggregateTitForTat(nSeatsResults, results, params);
+    Object.assign(agg, tftAgg);
   }
 
   return { results, aggregated: agg, params };
@@ -970,8 +994,8 @@ async function runExperimentAsync(experimentType, userParams, onProgress) {
         // Run full baseline pipeline so justice data is available for charts
         runBaselinePipeline(sim, params);
         // Also compute seat count trajectory
-        const nSeats = titForTat(sim, params);
-        nSeatsResults.push(nSeats);
+        const tft = titForTat(sim, params);
+        nSeatsResults.push(tft);
         break;
       }
       case 'termLimits':
@@ -996,10 +1020,8 @@ async function runExperimentAsync(experimentType, userParams, onProgress) {
 
   const agg = aggregateSimulations(results, params);
   if (experimentType === 'titForTat') {
-    const tftAgg = aggregateTitForTat(nSeatsResults, params);
-    agg.nSeatsMean = tftAgg.nSeatsMean;
-    agg.nSeatsP025 = tftAgg.nSeatsP025;
-    agg.nSeatsP975 = tftAgg.nSeatsP975;
+    const tftAgg = aggregateTitForTat(nSeatsResults, results, params);
+    Object.assign(agg, tftAgg);
   }
 
   return { results, aggregated: agg, params };
