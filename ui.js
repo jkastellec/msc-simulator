@@ -299,15 +299,8 @@ function updateCharts() {
 
   if (resultsList.length === 0) return;
 
-  // Chart 1: Median ideology comparison (exclude tit-for-tat — it only tracks seat count, not individual justices)
-  const ideoIds = selectedExperiments.filter(id => id !== 'titForTat' && simulationResults[id]);
-  const ideoResults = ideoIds.map(id => simulationResults[id]);
-  const ideoNames = ideoIds.map(id => EXPERIMENTS[id].label);
-  if (ideoResults.length > 0) {
-    renderMedianIdeologyChart('chart-ideology', ideoResults, ideoNames);
-  } else {
-    destroyChart('chart-ideology');
-  }
+  // Chart 1: Median ideology comparison
+  renderMedianIdeologyChart('chart-ideology', resultsList, names);
 
   // Chart 2: Dem seats box plot by decade (primary experiment)
   const primaryResult = resultsList[0];
@@ -320,7 +313,8 @@ function updateCharts() {
   renderBranchControlChart('chart-branches', primaryResult);
 
   // Chart 5: Dem seats comparison
-  renderDemSeatsMeanChart('chart-dem-seats', resultsList, names, simulationResults);
+  // Chart 5: Dem seats comparison (all experiments including tit-for-tat)
+  renderDemSeatsMeanChart('chart-dem-seats', resultsList, names);
 
   // Chart 6: Tit-for-tat seat count (show/hide card based on whether tit-for-tat was run)
   const seatsPlaceholder = document.getElementById('chart-seats-placeholder');
