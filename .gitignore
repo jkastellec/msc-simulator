@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# R / data files (not part of web app)
+*.Rdata
+*.rdata
+*.RData
+*.dta
+*.csv
+*.R
+*.r
+
+# Test files
+test_*.js
+test_*.html
+serve.*
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

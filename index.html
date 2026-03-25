@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSC Simulator — Supreme Court Composition</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>MSC Simulator</h1>
+    <div class="header-controls">
+      <label>Sims:
+        <select id="num-sims">
+          <option value="100">100 (fast)</option>
+          <option value="200" selected>200 (default)</option>
+          <option value="500">500 (accurate)</option>
+          <option value="1000">1000 (slow)</option>
+        </select>
+      </label>
+      <label>End year:
+        <input type="number" id="end-year" value="2100" min="2030" max="2200" step="10">
+      </label>
+      <button class="run-btn" id="run-btn">Run Simulations</button>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="status-text" id="status-text">Ready</span>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- LEFT PANEL: Controls -->
+    <div class="left-panel">
+
+      <div class="section">
+        <div class="section-header">
+          <span>Experiments</span>
+          <span class="arrow">&#9660;</span>
+        </div>
+        <div class="section-body">
+          <div id="experiment-list"></div>
+        </div>
+      </div>
+
+      <div id="advanced-params"></div>
+
+      <div class="section" style="margin-top: 12px;">
+        <div class="section-body" style="display:flex; gap:8px;">
+          <button class="export-btn" id="export-r-btn">Export to R</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: Charts -->
+    <div class="right-panel">
+      <div class="chart-grid">
+
+        <div class="chart-card full-width">
+          <h3>Median Justice Ideology Over Time</h3>
+          <div style="height:300px;"><canvas id="chart-ideology"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+          <h3>Dem-Appointed Seats Over Time</h3>
+          <div style="height:250px;"><canvas id="chart-dem-seats"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+          <h3>Dem Seat Count Distribution</h3>
+          <div style="height:250px;"><canvas id="chart-histogram"></canvas></div>
+          <div class="chart-controls">
+            <label>Year: <select id="histogram-year"><option value="2050">2050</option></select></label>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h3>Bloc Composition (Primary Experiment)</h3>
+          <div style="height:250px;"><canvas id="chart-blocs"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+          <h3>Branch Control Probabilities</h3>
+          <div style="height:250px;"><canvas id="chart-branches"></canvas></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="disclaimer">
+    Results are approximate (200 simulations). For full precision, see the
+    <a href="https://github.com/jkastell/replicate_MSC_sims" target="_blank">R replication package</a>.
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="simulator.js"></script>
+  <script src="experiments.js"></script>
+  <script src="charts.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
