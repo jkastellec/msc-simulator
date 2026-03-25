@@ -33,7 +33,7 @@ function getChartDefaults() {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: { color: '#e0e0e0', font: { size: 11 }, usePointStyle: true, pointStyle: 'line' },
+        labels: { color: '#e0e0e0', font: { size: 11 }, usePointStyle: true, pointStyleWidth: 40 },
       },
       tooltip: {
         backgroundColor: '#1a1a2e',
@@ -79,6 +79,7 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
       borderColor: color,
       backgroundColor: 'transparent',
       borderWidth: 2,
+      pointStyle: 'line',
       pointRadius: 0,
       tension: 0.3,
     });
@@ -92,6 +93,7 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
         backgroundColor: 'transparent',
         borderWidth: 1,
         borderDash: [3, 3],
+        pointStyle: 'line',
         pointRadius: 0,
         fill: false,
       });
@@ -102,6 +104,7 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
         backgroundColor: CHART_COLORS.ci,
         borderWidth: 1,
         borderDash: [3, 3],
+        pointStyle: 'line',
         pointRadius: 0,
         fill: '-1',
       });
@@ -253,6 +256,7 @@ function renderBlocChart(canvasId, result) {
           borderColor: CHART_COLORS.liberal,
           borderWidth: 1.5,
           fill: true,
+          pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
@@ -263,6 +267,7 @@ function renderBlocChart(canvasId, result) {
           borderColor: CHART_COLORS.moderate,
           borderWidth: 1.5,
           fill: true,
+          pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
@@ -273,6 +278,7 @@ function renderBlocChart(canvasId, result) {
           borderColor: CHART_COLORS.conservative,
           borderWidth: 1.5,
           fill: true,
+          pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
@@ -310,6 +316,7 @@ function renderBranchControlChart(canvasId, result) {
           data: agg.years.map((yr, i) => ({ x: yr, y: agg.pDemPresident[i] })),
           borderColor: CHART_COLORS.dem,
           borderWidth: 2,
+          pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
@@ -318,6 +325,7 @@ function renderBranchControlChart(canvasId, result) {
           data: agg.years.map((yr, i) => ({ x: yr, y: agg.pDemSenate[i] })),
           borderColor: '#6bcb77',
           borderWidth: 2,
+          pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
@@ -327,6 +335,7 @@ function renderBranchControlChart(canvasId, result) {
           borderColor: '#ffd93d',
           borderWidth: 2,
           borderDash: [5, 3],
+          pointStyle: 'line',
           pointRadius: 0,
           tension: 0.3,
         },
@@ -374,6 +383,7 @@ function renderDemSeatsMeanChart(canvasId, results, experimentNames) {
       borderColor: color,
       backgroundColor: 'transparent',
       borderWidth: 2,
+      pointStyle: 'line',
       pointRadius: 0,
       tension: 0.3,
     });
