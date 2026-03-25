@@ -211,6 +211,31 @@ button.run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   color: var(--accent);
 }
 
+/* Ideology slider */
+.ideology-row {
+  flex-wrap: wrap;
+}
+
+.ideology-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ideology-slider-wrap input[type="range"] {
+  flex: 1;
+  min-width: 60px;
+}
+
+.ideology-label-left,
+.ideology-label-right {
+  font-size: 9px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
 .param-row input[type="number"] {
   width: 55px;
   background: var(--bg-input);

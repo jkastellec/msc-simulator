@@ -72,11 +72,11 @@ const PARAM_DEFS = [
     { key: 'repUniMid',  label: 'Rep sw. uni/mid',  min: 0, max: 1, step: 0.01 },
     { key: 'repDivMid',  label: 'Rep sw. div/mid',  min: 0, max: 1, step: 0.01 },
   ]},
-  { group: 'Justice Ideology (Beta shapes)', params: [
-    { key: 'demShape1', label: 'Dem shape \u03B1', min: 1, max: 20, step: 0.5, type: 'number' },
-    { key: 'demShape2', label: 'Dem shape \u03B2', min: 1, max: 20, step: 0.5, type: 'number' },
-    { key: 'repShape1', label: 'Rep shape \u03B1', min: 1, max: 20, step: 0.5, type: 'number' },
-    { key: 'repShape2', label: 'Rep shape \u03B2', min: 1, max: 20, step: 0.5, type: 'number' },
+  { group: 'Nominee Ideology', params: [
+    { key: 'demIdeologyMean', label: 'Dem nominees', min: -0.80, max: -0.30, step: 0.01,
+      labelLeft: 'Very Liberal', labelRight: 'Moderate', type: 'ideology' },
+    { key: 'repIdeologyMean', label: 'Rep nominees', min: 0.30, max: 0.80, step: 0.01,
+      labelLeft: 'Moderate', labelRight: 'Very Conservative', type: 'ideology' },
   ]},
   { group: 'Retirement & Replacement', params: [
     { key: 'weightStrategicRetirement', label: 'Strategic ret. weight', min: 0, max: 2, step: 0.1 },
@@ -105,7 +105,23 @@ function renderAdvancedParams() {
       const row = document.createElement('div');
       row.className = 'param-row';
 
-      if (p.type === 'number') {
+      if (p.type === 'ideology') {
+        // Ideology slider with labeled endpoints
+        const defaultMean = p.key === 'demIdeologyMean' ? -0.57 : 0.57;
+        row.className = 'param-row ideology-row';
+        row.innerHTML = `
+          <label>${p.label}</label>
+          <div class="ideology-slider-wrap">
+            <span class="ideology-label-left">${p.labelLeft}</span>
+            <input type="range" id="param-${p.key}" value="${defaultMean}" min="${p.min}" max="${p.max}" step="${p.step}">
+            <span class="ideology-label-right">${p.labelRight}</span>
+          </div>
+          <span class="param-value" id="val-${p.key}">${defaultMean.toFixed(2)}</span>
+        `;
+        row.querySelector('input[type="range"]').addEventListener('input', (e) => {
+          document.getElementById(`val-${p.key}`).textContent = Number(e.target.value).toFixed(2);
+        });
+      } else if (p.type === 'number') {
         row.innerHTML = `
           <label>${p.label}</label>
           <input type="number" id="param-${p.key}" value="${defaultVal}" min="${p.min}" max="${p.max}" step="${p.step}">
@@ -127,12 +143,44 @@ function renderAdvancedParams() {
   });
 }
 
+// Convert ideology mean on [-1,1] to Beta shape params
+// Keep concentration (alpha+beta) = 14 (matching default Beta(3,11))
+// For Dem: mean_beta = (ideologyMean + 1) / 2, alpha = mean_beta * 14, beta = 14 - alpha
+// For Rep: the simulator negates, so mean_beta = (-ideologyMean + 1) / 2
+function ideologyMeanToBetaShapes(ideologyMean, party) {
+  const concentration = 14;
+  let meanBeta;
+  if (party === 'dem') {
+    meanBeta = (ideologyMean + 1) / 2; // e.g., -0.57 -> 0.215
+  } else {
+    meanBeta = (-ideologyMean + 1) / 2; // e.g., +0.57 -> 0.215
+  }
+  const alpha = Math.max(1, meanBeta * concentration);
+  const beta = Math.max(1, concentration - alpha);
+  return { shape1: alpha, shape2: beta };
+}
+
 function getCustomParams() {
   const params = {};
   PARAM_DEFS.forEach(group => {
     group.params.forEach(p => {
       const el = document.getElementById(`param-${p.key}`);
-      if (el) params[p.key] = parseFloat(el.value);
+      if (!el) return;
+      if (p.type === 'ideology') {
+        // Convert slider value to Beta shapes
+        const mean = parseFloat(el.value);
+        if (p.key === 'demIdeologyMean') {
+          const shapes = ideologyMeanToBetaShapes(mean, 'dem');
+          params.demShape1 = shapes.shape1;
+          params.demShape2 = shapes.shape2;
+        } else if (p.key === 'repIdeologyMean') {
+          const shapes = ideologyMeanToBetaShapes(mean, 'rep');
+          params.repShape1 = shapes.shape1;
+          params.repShape2 = shapes.shape2;
+        }
+      } else {
+        params[p.key] = parseFloat(el.value);
+      }
     });
   });
   return params;
