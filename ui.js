@@ -56,21 +56,19 @@ function renderExperimentList() {
 // ============================================================
 
 const PARAM_DEFS = [
-  { group: 'Election Probabilities', params: [
-    { key: 'probDemPDD', label: 'P(Dem | 2 Dem terms)', min: 0, max: 1, step: 0.01 },
-    { key: 'probDemPRR', label: 'P(Dem | 2 Rep terms)', min: 0, max: 1, step: 0.01 },
-    { key: 'probDemPRD', label: 'P(Dem | Dem incumb.)', min: 0, max: 1, step: 0.01 },
-    { key: 'probDemPDR', label: 'P(Dem | Rep incumb.)', min: 0, max: 1, step: 0.01 },
+  { group: 'Presidential Elections', subtitle: 'Probability of Democratic presidential win in each scenario (historical average)', params: [
+    { key: 'probDemPRD', label: 'Dem wins re-election (1st term)', min: 0, max: 1, step: 0.01 },
+    { key: 'probDemPDD', label: 'Dem wins 3rd+ consecutive term', min: 0, max: 1, step: 0.01 },
+    { key: 'probDemPDR', label: 'Dem wins vs. Rep incumbent', min: 0, max: 1, step: 0.01 },
+    { key: 'probDemPRR', label: 'Dem wins after 2 Rep terms', min: 0, max: 1, step: 0.01 },
   ]},
-  { group: 'Senate Switch Probs', params: [
-    { key: 'demUniPres', label: 'Dem sw. uni/pres', min: 0, max: 1, step: 0.01 },
-    { key: 'demDivPres', label: 'Dem sw. div/pres', min: 0, max: 1, step: 0.01 },
-    { key: 'demUniMid',  label: 'Dem sw. uni/mid',  min: 0, max: 1, step: 0.01 },
-    { key: 'demDivMid',  label: 'Dem sw. div/mid',  min: 0, max: 1, step: 0.01 },
-    { key: 'repUniPres', label: 'Rep sw. uni/pres', min: 0, max: 1, step: 0.01 },
-    { key: 'repDivPres', label: 'Rep sw. div/pres', min: 0, max: 1, step: 0.01 },
-    { key: 'repUniMid',  label: 'Rep sw. uni/mid',  min: 0, max: 1, step: 0.01 },
-    { key: 'repDivMid',  label: 'Rep sw. div/mid',  min: 0, max: 1, step: 0.01 },
+  { group: 'Senate Control', subtitle: 'Probability the Senate changes party control in a given election', params: [
+    { key: 'senateFlipUnified', label: 'Flips under unified gov.',
+      min: 0.05, max: 0.80, step: 0.01, type: 'senate',
+      labelLeft: 'Low (stable)', labelRight: 'High (volatile)' },
+    { key: 'senateFlipDivided', label: 'Flips under divided gov.',
+      min: 0.05, max: 0.80, step: 0.01, type: 'senate',
+      labelLeft: 'Low (stable)', labelRight: 'High (volatile)' },
   ]},
   { group: 'Nominee Ideology', params: [
     { key: 'demIdeologyMean', label: 'Dem nominees', min: -0.80, max: -0.30, step: 0.01,
@@ -97,7 +95,9 @@ function renderAdvancedParams() {
         <span>${group.group}</span>
         <span class="arrow">&#9660;</span>
       </div>
-      <div class="section-body"></div>
+      <div class="section-body">
+        ${group.subtitle ? `<div class="section-subtitle">${group.subtitle}</div>` : ''}
+      </div>
     `;
     const body = section.querySelector('.section-body');
     group.params.forEach(p => {
@@ -105,9 +105,15 @@ function renderAdvancedParams() {
       const row = document.createElement('div');
       row.className = 'param-row';
 
-      if (p.type === 'ideology') {
-        // Ideology slider with labeled endpoints and value below
-        const defaultMean = p.key === 'demIdeologyMean' ? -0.57 : 0.57;
+      if (p.type === 'ideology' || p.type === 'senate') {
+        // Slider with labeled endpoints and value below
+        let defaultMean;
+        if (p.key === 'demIdeologyMean') defaultMean = -0.57;
+        else if (p.key === 'repIdeologyMean') defaultMean = 0.57;
+        else if (p.key === 'senateFlipUnified') defaultMean = 0.40;
+        else if (p.key === 'senateFlipDivided') defaultMean = 0.18;
+        else defaultMean = defaultVal || (p.min + p.max) / 2;
+
         row.className = 'param-row ideology-row';
         row.innerHTML = `
           <label>${p.label}</label>
@@ -116,7 +122,7 @@ function renderAdvancedParams() {
             <input type="range" id="param-${p.key}" value="${defaultMean}" min="${p.min}" max="${p.max}" step="${p.step}">
             <span class="ideology-label-right">${p.labelRight}</span>
           </div>
-          <div class="ideology-current-value">Current mean: <span id="val-${p.key}">${defaultMean.toFixed(2)}</span></div>
+          <div class="ideology-current-value">${p.type === 'senate' ? 'Flip probability' : 'Current mean'}: <span id="val-${p.key}">${defaultMean.toFixed(2)}</span></div>
         `;
         row.querySelector('input[type="range"]').addEventListener('input', (e) => {
           document.getElementById(`val-${p.key}`).textContent = Number(e.target.value).toFixed(2);
@@ -177,6 +183,20 @@ function getCustomParams() {
           const shapes = ideologyMeanToBetaShapes(mean, 'rep');
           params.repShape1 = shapes.shape1;
           params.repShape2 = shapes.shape2;
+        }
+      } else if (p.type === 'senate') {
+        // Expand 2 simplified sliders into 8 symmetric senate switch params
+        const val = parseFloat(el.value);
+        if (p.key === 'senateFlipUnified') {
+          params.demUniPres = val;
+          params.demUniMid  = val;
+          params.repUniPres = val;
+          params.repUniMid  = val;
+        } else if (p.key === 'senateFlipDivided') {
+          params.demDivPres = val;
+          params.demDivMid  = val;
+          params.repDivPres = val;
+          params.repDivMid  = val;
         }
       } else {
         params[p.key] = parseFloat(el.value);

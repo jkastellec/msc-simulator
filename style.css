@@ -156,6 +156,14 @@ button.run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   padding: 8px 10px;
 }
 
+.section-subtitle {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
 /* Experiment selector */
 .experiment-list {
   display: flex;
