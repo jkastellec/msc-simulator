@@ -292,6 +292,10 @@ button.run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   grid-column: 1 / -1;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .chart-card h3 {
   font-size: 13px;
   color: var(--accent);

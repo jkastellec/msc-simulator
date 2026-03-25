@@ -333,10 +333,10 @@ function updateCharts() {
   const seatsCard = document.getElementById('chart-seats-card');
   const titForTatResult = simulationResults['titForTat'];
   if (titForTatResult && titForTatResult.aggregated.nSeatsMean) {
-    seatsCard.style.display = 'block';
+    seatsCard.classList.remove('hidden');
     renderSeatCountChart('chart-seats', titForTatResult);
   } else {
-    seatsCard.style.display = 'none';
+    seatsCard.classList.add('hidden');
     destroyChart('chart-seats');
   }
 }
