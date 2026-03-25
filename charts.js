@@ -248,11 +248,10 @@ function renderBlocChart(canvasId, result) {
   charts[canvasId] = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: agg.years,
       datasets: [
         {
           label: 'Liberal (< -0.2)',
-          data: agg.blocLiberal,
+          data: agg.years.map((yr, i) => ({ x: yr, y: agg.blocLiberal[i] })),
           backgroundColor: CHART_COLORS.liberal + '40',
           borderColor: CHART_COLORS.liberal,
           borderWidth: 1.5,
@@ -263,7 +262,7 @@ function renderBlocChart(canvasId, result) {
         },
         {
           label: 'Moderate',
-          data: agg.blocModerate,
+          data: agg.years.map((yr, i) => ({ x: yr, y: agg.blocModerate[i] })),
           backgroundColor: CHART_COLORS.moderate + '40',
           borderColor: CHART_COLORS.moderate,
           borderWidth: 1.5,
@@ -274,7 +273,7 @@ function renderBlocChart(canvasId, result) {
         },
         {
           label: 'Conservative (> 0.2)',
-          data: agg.blocConservative,
+          data: agg.years.map((yr, i) => ({ x: yr, y: agg.blocConservative[i] })),
           backgroundColor: CHART_COLORS.conservative + '40',
           borderColor: CHART_COLORS.conservative,
           borderWidth: 1.5,
@@ -289,7 +288,7 @@ function renderBlocChart(canvasId, result) {
       ...defaults,
       scales: {
         ...defaults.scales,
-        x: { ...defaults.scales.x, title: { display: true, text: 'Year', color: '#a0a0b0' } },
+        x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
         y: { ...defaults.scales.y, stacked: true, title: { display: true, text: 'Mean Justices', color: '#a0a0b0' } },
       },
       plugins: {
