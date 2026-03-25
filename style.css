@@ -296,6 +296,11 @@ button.run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   display: none !important;
 }
 
+.chart-seats-standalone {
+  margin-top: 16px;
+  width: 100%;
+}
+
 .chart-card h3 {
   font-size: 13px;
   color: var(--accent);
