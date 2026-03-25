@@ -904,12 +904,10 @@ function runExperiment(experimentType, userParams) {
         runCourtPackingPipeline(sim, params);
         break;
       case 'titForTat': {
-        predictPresident(sim, params);
-        predictSenate(sim, params);
+        runBaselinePipeline(sim, params);
         const nSeats = titForTat(sim, params);
         nSeatsResults.push(nSeats);
-        results.push(sim);
-        continue;
+        break;
       }
       case 'termLimits':
         runTermLimitPipeline(sim, params);
@@ -958,16 +956,12 @@ async function runExperimentAsync(experimentType, userParams, onProgress) {
         runCourtPackingPipeline(sim, params);
         break;
       case 'titForTat': {
-        predictPresident(sim, params);
-        predictSenate(sim, params);
+        // Run full baseline pipeline so justice data is available for charts
+        runBaselinePipeline(sim, params);
+        // Also compute seat count trajectory
         const nSeats = titForTat(sim, params);
         nSeatsResults.push(nSeats);
-        results.push(sim);
-        if (s % batchSize === 0 && onProgress) {
-          onProgress(s / nSims);
-          await new Promise(r => setTimeout(r, 0));
-        }
-        continue;
+        break;
       }
       case 'termLimits':
         runTermLimitPipeline(sim, params);
