@@ -99,10 +99,6 @@ function renderAdvancedParams() {
       </div>
       <div class="section-body"></div>
     `;
-    section.querySelector('.section-header').addEventListener('click', () => {
-      section.classList.toggle('collapsed');
-    });
-
     const body = section.querySelector('.section-body');
     group.params.forEach(p => {
       const defaultVal = DEFAULT_PARAMS[p.key];
