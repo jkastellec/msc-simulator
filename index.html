@@ -86,9 +86,12 @@
 
       </div>
 
-      <div class="chart-card chart-seats-standalone hidden" id="chart-seats-card">
+      <div class="chart-card chart-seats-standalone" id="chart-seats-card">
         <h3>Expected Court Size (Tit-for-Tat)</h3>
-        <div style="height:300px;"><canvas id="chart-seats"></canvas></div>
+        <div style="height:300px; position:relative;">
+          <canvas id="chart-seats"></canvas>
+          <div class="chart-placeholder" id="chart-seats-placeholder">Select "Tit-for-Tat Court Packing" experiment to see this chart</div>
+        </div>
       </div>
     </div>
   </div>

@@ -330,13 +330,13 @@ function updateCharts() {
   }
 
   // Chart 6: Tit-for-tat seat count (show/hide card based on whether tit-for-tat was run)
-  const seatsCard = document.getElementById('chart-seats-card');
+  const seatsPlaceholder = document.getElementById('chart-seats-placeholder');
   const titForTatResult = simulationResults['titForTat'];
   if (titForTatResult && titForTatResult.aggregated.nSeatsMean) {
-    seatsCard.classList.remove('hidden');
+    seatsPlaceholder.style.display = 'none';
     renderSeatCountChart('chart-seats', titForTatResult);
   } else {
-    seatsCard.classList.add('hidden');
+    seatsPlaceholder.style.display = 'flex';
     destroyChart('chart-seats');
   }
 }
