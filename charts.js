@@ -141,7 +141,7 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
       scales: {
         ...defaults.scales,
         x: { ...defaults.scales.x, type: 'linear', title: { display: true, text: 'Year', color: '#a0a0b0' } },
-        y: { ...defaults.scales.y, min: -1, max: 1, title: { display: true, text: 'Median Justice Ideology', color: '#a0a0b0' } },
+        y: { ...defaults.scales.y, min: -1, max: 1, title: { display: true, text: 'Conservatism of Median Justice', color: '#a0a0b0' } },
       },
     },
   });
