@@ -868,6 +868,58 @@ function aggregateSimulations(results, params) {
   return agg;
 }
 
+// Prepend historical data (2016-2025) to aggregated simulation results.
+// Historical data has zero variance (known facts), so CI bands collapse to the mean.
+function prependHistoricalData(agg, params) {
+  // Only prepend for experiments starting at 2026 (not 2016 counterfactual which starts at 2017)
+  if (params.currentYear !== 2026) return agg;
+  if (typeof HISTORICAL_DATA === 'undefined') return agg;
+
+  // Filter historical years before the simulation start
+  const hist = HISTORICAL_DATA.filter(h => h.year < params.currentYear);
+  if (hist.length === 0) return agg;
+
+  const hYears = hist.map(h => h.year);
+  const hMedian = hist.map(h => h.medianIdeology);
+  const hDemSeats = hist.map(h => h.demSeats);
+  const hDemPres = hist.map(h => h.demPresident);
+  const hDemSen = hist.map(h => h.demSenate);
+  const hUnified = hist.map(h => h.unifiedGov);
+  const hLiberal = hist.map(h => h.liberal);
+  const hModerate = hist.map(h => h.moderate);
+  const hConservative = hist.map(h => h.conservative);
+
+  agg.years = [...hYears, ...agg.years];
+  agg.medianIdeologyMean = [...hMedian, ...agg.medianIdeologyMean];
+  agg.medianIdeologyMedian = [...hMedian, ...agg.medianIdeologyMedian];
+  agg.medianIdeologyP025 = [...hMedian, ...agg.medianIdeologyP025]; // no variance for known data
+  agg.medianIdeologyP975 = [...hMedian, ...agg.medianIdeologyP975];
+  agg.demSeatsMean = [...hDemSeats, ...agg.demSeatsMean];
+  agg.pDemPresident = [...hDemPres, ...agg.pDemPresident];
+  agg.pDemSenate = [...hDemSen, ...agg.pDemSenate];
+  agg.pUnifiedGov = [...hUnified, ...agg.pUnifiedGov];
+  agg.blocLiberal = [...hLiberal, ...agg.blocLiberal];
+  agg.blocModerate = [...hModerate, ...agg.blocModerate];
+  agg.blocConservative = [...hConservative, ...agg.blocConservative];
+
+  // Tit-for-tat arrays if present
+  if (agg.nSeatsMean) {
+    const hSeats = new Array(hist.length).fill(9);
+    agg.nSeatsMean = [...hSeats, ...agg.nSeatsMean];
+    if (agg.nSeatsP025) agg.nSeatsP025 = [...hSeats, ...agg.nSeatsP025];
+    if (agg.nSeatsP975) agg.nSeatsP975 = [...hSeats, ...agg.nSeatsP975];
+  }
+  if (agg.tftDemSeatsMean) {
+    agg.tftDemSeatsMean = [...hDemSeats, ...agg.tftDemSeatsMean];
+  }
+  if (agg.tftDemShareMean) {
+    const hShare = hist.map(h => h.demSeats / 9);
+    agg.tftDemShareMean = [...hShare, ...agg.tftDemShareMean];
+  }
+
+  return agg;
+}
+
 // Aggregate tit-for-tat results
 // nSeatsResults: array of {nSeats, packedDemSeats} per sim
 // simResults: array of sim objects (for baseline demJustice counts)
@@ -963,6 +1015,8 @@ function runExperiment(experimentType, userParams) {
     Object.assign(agg, tftAgg);
   }
 
+  prependHistoricalData(agg, params);
+
   return { results, aggregated: agg, params };
 }
 
@@ -1024,6 +1078,8 @@ async function runExperimentAsync(experimentType, userParams, onProgress) {
     const tftAgg = aggregateTitForTat(nSeatsResults, results, params);
     Object.assign(agg, tftAgg);
   }
+
+  prependHistoricalData(agg, params);
 
   return { results, aggregated: agg, params };
 }

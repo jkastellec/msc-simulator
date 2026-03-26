@@ -82,6 +82,66 @@ const STARTING_COURT_PACKED_2021 = [
 ];
 
 // ============================================================
+// HISTORICAL COURT DATA (2016-2025)
+// Known court composition for prepending to simulated results.
+// NSP ideology scores are static (no drift model in this sim).
+//
+// Court changes:
+//   2016: Scalia dies Feb → 8 justices (vacancy)
+//   2017: Gorsuch replaces Scalia (Trump)
+//   2018: Kavanaugh replaces Kennedy (Trump)
+//   2020: Barrett replaces Ginsburg (Trump, Oct)
+//   2022: Jackson replaces Breyer (Biden)
+//   2023-2025: stable 6-3 conservative court
+//
+// medianIdeology: median of 9 justices' NSP scores (5th value when sorted)
+//   For 2016 (8 justices): average of 4th and 5th sorted values
+// demSeats: number of Dem-appointed justices
+// demPresident: 1=Dem, 0=Rep (at start of year)
+// demSenate: 1=Dem majority, 0=Rep
+// unifiedGov: 1=same party controls presidency and senate
+// ============================================================
+const HISTORICAL_DATA = [
+  // 2016: Obama(D), Rep Senate. Court: Roberts(.637), Kennedy(.474), Thomas(.543),
+  //   Alito(.651), Ginsburg(-.301), Breyer(-.152), Sotomayor(-.299), Kagan(-.292)
+  //   Scalia vacancy. Sorted 8: [-.301,-.299,-.292,-.152, .474,.543,.637,.651]
+  //   Median = avg(4th,5th) = (-.152+.474)/2 = 0.161
+  { year: 2016, medianIdeology: 0.161, demSeats: 4, demPresident: 1, demSenate: 0, unifiedGov: 0,
+    liberal: 4, moderate: 0, conservative: 4 },
+  // 2017: Trump(R), Rep Senate. Gorsuch(.583) replaces Scalia.
+  //   Sorted 9: [-.301,-.299,-.292,-.152, .474,.543,.583,.637,.651]  median=.474 (Kennedy)
+  { year: 2017, medianIdeology: 0.474, demSeats: 4, demPresident: 0, demSenate: 0, unifiedGov: 1,
+    liberal: 4, moderate: 0, conservative: 5 },
+  // 2018: Kavanaugh(.670) replaces Kennedy(.474).
+  //   Sorted 9: [-.301,-.299,-.292,-.152, .543,.583,.637,.651,.670]  median=.543 (Thomas)
+  { year: 2018, medianIdeology: 0.543, demSeats: 4, demPresident: 0, demSenate: 0, unifiedGov: 1,
+    liberal: 4, moderate: 0, conservative: 5 },
+  // 2019: Same court. Dem Senate (116th Congress). median=.543
+  { year: 2019, medianIdeology: 0.543, demSeats: 4, demPresident: 0, demSenate: 0, unifiedGov: 1,
+    liberal: 4, moderate: 0, conservative: 5 },
+  // 2020: Barrett(.455) replaces Ginsburg(-.301) in Oct.
+  //   Sorted 9: [-.299,-.292,-.152, .455,.543,.583,.637,.651,.670]  median=.543
+  { year: 2020, medianIdeology: 0.543, demSeats: 3, demPresident: 0, demSenate: 0, unifiedGov: 1,
+    liberal: 3, moderate: 0, conservative: 6 },
+  // 2021: Biden(D), Dem Senate (50-50+VP). Same court. median=.543
+  { year: 2021, medianIdeology: 0.543, demSeats: 3, demPresident: 1, demSenate: 1, unifiedGov: 1,
+    liberal: 3, moderate: 0, conservative: 6 },
+  // 2022: Jackson(-.32) replaces Breyer(-.152).
+  //   Sorted 9: [-.32,-.299,-.292, .455,.543,.583,.637,.651,.670]  median=.543
+  { year: 2022, medianIdeology: 0.543, demSeats: 3, demPresident: 1, demSenate: 1, unifiedGov: 1,
+    liberal: 3, moderate: 0, conservative: 6 },
+  // 2023: Same court. Dem Senate (51-49). median=.543
+  { year: 2023, medianIdeology: 0.543, demSeats: 3, demPresident: 1, demSenate: 1, unifiedGov: 1,
+    liberal: 3, moderate: 0, conservative: 6 },
+  // 2024: Same court. median=.543
+  { year: 2024, medianIdeology: 0.543, demSeats: 3, demPresident: 1, demSenate: 1, unifiedGov: 1,
+    liberal: 3, moderate: 0, conservative: 6 },
+  // 2025: Trump(R), Rep Senate. Same justices. median=.543
+  { year: 2025, medianIdeology: 0.543, demSeats: 3, demPresident: 0, demSenate: 0, unifiedGov: 1,
+    liberal: 3, moderate: 0, conservative: 6 },
+];
+
+// ============================================================
 // DEATH PROBABILITIES (SSA mortality table)
 // From death_probabilities_from_SSA_for_simulations.csv
 // Index by age (0-119)

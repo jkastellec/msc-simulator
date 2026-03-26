@@ -222,6 +222,14 @@ function setupEventListeners() {
 
   document.getElementById('export-r-btn').addEventListener('click', exportToR);
 
+  // CI toggle — re-renders charts when toggled (if results exist)
+  document.getElementById('ci-toggle').addEventListener('change', (e) => {
+    showConfidenceIntervals = e.target.checked;
+    if (Object.keys(simulationResults).length > 0) {
+      updateCharts();
+    }
+  });
+
   // About modal
   const aboutModal = document.getElementById('about-modal');
   document.getElementById('about-btn').addEventListener('click', () => {

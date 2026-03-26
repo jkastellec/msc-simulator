@@ -21,6 +21,63 @@ const EXPERIMENT_COLORS = [
 // Global chart instances
 let charts = {};
 
+// Global CI visibility flag (toggled by UI checkbox)
+let showConfidenceIntervals = false;
+
+// Custom Chart.js plugin: draws a vertical dashed line at x=2026 labeled "Today"
+const todayLinePlugin = {
+  id: 'todayLine',
+  afterDraw(chart) {
+    const xScale = chart.scales.x;
+    if (!xScale) return;
+    const xPixel = xScale.getPixelForValue(2026);
+    if (xPixel === undefined || xPixel < xScale.left || xPixel > xScale.right) return;
+
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.beginPath();
+    ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(xPixel, chart.chartArea.top);
+    ctx.lineTo(xPixel, chart.chartArea.bottom);
+    ctx.stroke();
+
+    // Label
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Today', xPixel, chart.chartArea.top - 4);
+    ctx.restore();
+  },
+};
+
+// Custom Chart.js plugin: draws a horizontal dashed line at y=0
+const zeroLinePlugin = {
+  id: 'zeroLine',
+  afterDraw(chart) {
+    const yScale = chart.scales.y;
+    if (!yScale) return;
+    const yPixel = yScale.getPixelForValue(0);
+    if (yPixel === undefined || yPixel < chart.chartArea.top || yPixel > chart.chartArea.bottom) return;
+
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.beginPath();
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 1;
+    ctx.moveTo(chart.chartArea.left, yPixel);
+    ctx.lineTo(chart.chartArea.right, yPixel);
+    ctx.stroke();
+    ctx.restore();
+  },
+};
+
+// Register plugins globally
+Chart.register(todayLinePlugin, zeroLinePlugin);
+
 function destroyChart(id) {
   if (charts[id]) {
     charts[id].destroy();
@@ -85,8 +142,8 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
       tension: 0.3,
     });
 
-    // CI band (only for first/primary experiment)
-    if (idx === 0) {
+    // CI band (only for first/primary experiment, togglable)
+    if (idx === 0 && showConfidenceIntervals) {
       datasets.push({
         label: '95% CI',
         data: agg.years.map((yr, i) => ({ x: yr, y: agg.medianIdeologyP975[i] })),
@@ -127,17 +184,8 @@ function renderMedianIdeologyChart(canvasId, results, experimentNames) {
             filter: (item) => !item.text.startsWith('_'),
           },
         },
-        annotation: {
-          annotations: {
-            zeroLine: {
-              type: 'line',
-              yMin: 0, yMax: 0,
-              borderColor: 'rgba(255,255,255,0.3)',
-              borderWidth: 1,
-              borderDash: [5, 5],
-            },
-          },
-        },
+        todayLine: {}, // uses global plugin
+        zeroLine: {}, // uses global plugin
       },
       scales: {
         ...defaults.scales,
@@ -475,8 +523,8 @@ function renderSeatCountChart(canvasId, result) {
     },
   ];
 
-  // Add CI band if available
-  if (agg.nSeatsP975 && agg.nSeatsP025) {
+  // Add CI band if available and toggled on
+  if (showConfidenceIntervals && agg.nSeatsP975 && agg.nSeatsP025) {
     datasets.push({
       label: '95% CI',
       data: agg.years.map((yr, i) => ({ x: yr, y: agg.nSeatsP975[i] })),
