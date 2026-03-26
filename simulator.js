@@ -970,6 +970,7 @@ function runExperiment(experimentType, userParams) {
 async function runExperimentAsync(experimentType, userParams, onProgress) {
   const params = { ...DEFAULT_PARAMS, ...userParams };
   const nSims = params.numSims;
+  console.log('Running', nSims, 'simulations for', experimentType);
   const results = [];
   const nSeatsResults = [];
   const batchSize = 20;
