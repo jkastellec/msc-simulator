@@ -40,16 +40,20 @@ html {
 }
 .hero-content {
   flex: 7;
+  min-width: 0;
   text-align: left;
 }
 .hero-cover {
   flex: 3;
+  min-width: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 .hero-cover img {
   max-height: 200px;
+  max-width: 100%;
   width: auto;
   border-radius: 4px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
