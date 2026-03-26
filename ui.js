@@ -317,9 +317,10 @@ function updateCharts() {
   // Chart 1: Median ideology comparison
   renderMedianIdeologyChart('chart-ideology', resultsList, names);
 
-  // Chart 2: Dem seats box plot by decade (primary experiment)
+  // Chart 2: Dem seats box plot by decade (with experiment toggle)
   const primaryResult = resultsList[0];
   renderDemSeatsBoxplot('chart-boxplot', primaryResult);
+  buildBoxplotToggle(resultsList, names, selectedExperiments);
 
   // Chart 3: Bloc composition (primary experiment)
   const primaryName = names.length > 1 ? names[0] : '';
@@ -342,6 +343,56 @@ function updateCharts() {
     seatsPlaceholder.style.display = 'flex';
     destroyChart('chart-seats');
   }
+}
+
+// ============================================================
+// BOX PLOT EXPERIMENT TOGGLE
+// ============================================================
+
+function buildBoxplotToggle(resultsList, names, expIds) {
+  const container = document.getElementById('boxplot-toggle');
+  if (!container) return;
+
+  // Hide toggle if only 1 experiment
+  if (resultsList.length < 2) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'flex';
+  container.innerHTML = '';
+  container.style.cssText = 'display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px;';
+
+  names.forEach((name, idx) => {
+    const btn = document.createElement('button');
+    btn.textContent = name;
+    btn.style.cssText = 'padding:3px 10px; border-radius:12px; border:1px solid #2a2a4a; cursor:pointer; font-size:11px; transition:all 0.15s;';
+    if (idx === 0) {
+      btn.style.background = '#00d4aa';
+      btn.style.color = '#0d1b2a';
+      btn.style.borderColor = '#00d4aa';
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = '#a0a0b0';
+    }
+
+    btn.addEventListener('click', () => {
+      // Update active button styles
+      container.querySelectorAll('button').forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = '#a0a0b0';
+        b.style.borderColor = '#2a2a4a';
+      });
+      btn.style.background = '#00d4aa';
+      btn.style.color = '#0d1b2a';
+      btn.style.borderColor = '#00d4aa';
+
+      // Re-render box plot with selected experiment
+      renderDemSeatsBoxplot('chart-boxplot', resultsList[idx]);
+    });
+
+    container.appendChild(btn);
+  });
 }
 
 // ============================================================
