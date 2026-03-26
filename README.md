@@ -8,11 +8,11 @@ A browser-based interactive Supreme Court composition simulator. Runs entirely c
 - **6 policy experiments**: Baseline, No Strategic Retirement, No Divided-Government Confirmations, Court Packing (+4), Term Limits (18yr), 2016 Counterfactual
 - **Interactive parameter controls**: election probabilities, Senate switch rates, justice ideology distributions, retirement weighting
 - **Chart.js visualizations**: median ideology over time, Dem seat counts, bloc composition, branch control probabilities
-- **Export to R**: generates equivalent R parameter code for the [replication package](https://github.com/jkastell/replicate_MSC_sims)
+- **Export to R**: generates equivalent R parameter code for the [replication package](https://github.com/jkastellec/replicate_MSC_sims)
 
 ## Usage
 
-Open `index.html` in any modern browser, or visit the [live demo](https://jkastell.github.io/msc-simulator/).
+Open `index.html` in any modern browser, or visit the [live demo](https://jkastellec.github.io/msc-simulator/).
 
 Select an experiment, adjust parameters, and click **Run Simulations**.
 
