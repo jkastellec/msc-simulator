@@ -284,7 +284,7 @@ async function runSimulations() {
     progressFill.style.width = (completedExperiments / totalExperiments * 100) + '%';
   }
 
-  statusEl.textContent = `Done: ${numSims} sims x ${totalExperiments} experiments`;
+  statusEl.textContent = `Done: ${numSims} sims x ${totalExperiments} scenarios`;
   runBtn.disabled = false;
   runBtn.textContent = 'Run Simulations';
   isRunning = false;
