@@ -30,6 +30,13 @@
   flex: 1;
   min-width: 0;
 }
+.hero-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+}
 .hero-title {
   font-size: 32px;
   font-weight: 700;
