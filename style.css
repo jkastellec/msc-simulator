@@ -26,10 +26,8 @@ html {
 .hero {
   width: 100%;
   box-sizing: border-box;
-  background-color: #0d1b2a;
-  border-bottom: 2px solid var(--accent);
+  background: #0d1b2a;
   padding: 40px 60px;
-  overflow: hidden;
 }
 .hero-layout {
   display: flex;
@@ -37,28 +35,20 @@ html {
   justify-content: space-between;
   gap: 40px;
   width: 100%;
-  max-width: 100%;
-  margin: 0;
 }
 .hero-content {
   flex: 1;
   min-width: 0;
-  text-align: left;
 }
 .hero-cover {
   flex-shrink: 0;
-  width: 120px;
+  width: 130px;
   overflow: hidden;
 }
 .hero-cover img {
   max-width: 100%;
   height: auto;
   display: block;
-  border-radius: 4px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-.hero-cover img:hover {
-  transform: scale(1.03);
 }
 .hero-title {
   font-size: 32px;
