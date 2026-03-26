@@ -47,31 +47,36 @@
   margin-right: auto;
 }
 .hero-stats {
-  display: inline-flex;
+  display: flex !important;
+  flex-direction: row !important;
   justify-content: center;
+  align-items: stretch;
   gap: 20px;
   margin-bottom: 20px;
 }
 .stat-box {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
   align-items: center;
-  gap: 4px;
-  background: rgba(0, 212, 170, 0.08);
-  border: 1px solid rgba(0, 212, 170, 0.25);
+  justify-content: center;
+  gap: 6px;
+  background: rgba(0, 212, 170, 0.1);
+  border: 1px solid rgba(0, 212, 170, 0.3);
   border-radius: 10px;
-  padding: 12px 22px;
-  min-width: 100px;
+  padding: 14px 28px;
+  min-width: 120px;
 }
 .stat-number {
-  font-size: 22px;
+  display: block;
+  font-size: 24px;
   font-weight: 700;
-  color: #00d4aa;
+  color: #00d4aa !important;
   line-height: 1;
 }
 .stat-label {
+  display: block;
   font-size: 11px;
-  color: #ffffff;
+  color: #ffffff !important;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   line-height: 1;
