@@ -24,42 +24,38 @@ html {
 
 /* Hero banner */
 .hero {
-  display: block;
   width: 100%;
   box-sizing: border-box;
-  background: linear-gradient(135deg, #0d1b2a 0%, #152238 50%, #0d1b2a 100%);
+  background-color: #0d1b2a;
   border-bottom: 2px solid var(--accent);
-  padding: 40px 24px;
-  text-align: center;
+  padding: 40px 60px;
   overflow: hidden;
 }
 .hero-layout {
-  max-width: 900px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 32px;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
 }
 .hero-content {
-  flex: 7;
+  flex: 1;
   min-width: 0;
   text-align: left;
 }
 .hero-cover {
-  flex: 3;
-  min-width: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-shrink: 0;
+  width: 120px;
   overflow: hidden;
 }
 .hero-cover img {
-  max-height: 200px;
   max-width: 100%;
-  width: auto;
+  height: auto;
+  display: block;
   border-radius: 4px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s;
 }
 .hero-cover img:hover {
   transform: scale(1.03);
