@@ -24,11 +24,13 @@ html {
 
 /* Hero banner */
 .hero {
-  background: #0d1b2a;
-  border-bottom: 1px solid var(--border);
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #0d1b2a 0%, #152238 50%, #0d1b2a 100%);
+  border-bottom: 2px solid var(--accent);
   padding: 40px 24px;
   text-align: center;
-  width: 100%;
   overflow: hidden;
 }
 .hero-layout {
