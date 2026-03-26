@@ -46,14 +46,7 @@
   <header id="simulator-top">
     <h1>MSC Simulator</h1>
     <div class="header-controls">
-      <label>Sims:
-        <select id="num-sims">
-          <option value="100">100 (fast)</option>
-          <option value="200" selected>200 (default)</option>
-          <option value="500">500 (accurate)</option>
-          <option value="1000">1000 (slow)</option>
-        </select>
-      </label>
+      <input type="hidden" id="num-sims" value="1000">
       <label>End year:
         <input type="number" id="end-year" value="2100" min="2030" max="2200" step="10">
       </label>
