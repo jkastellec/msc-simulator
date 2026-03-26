@@ -26,9 +26,32 @@
   text-align: center;
   width: 100%;
 }
-.hero-content {
-  max-width: 720px;
+.hero-layout {
+  max-width: 900px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.hero-content {
+  flex: 7;
+  text-align: left;
+}
+.hero-cover {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-cover img {
+  max-height: 200px;
+  width: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s;
+}
+.hero-cover img:hover {
+  transform: scale(1.03);
 }
 .hero-title {
   font-size: 32px;
@@ -445,6 +468,9 @@ button.export-btn:hover {
 
 /* Responsive */
 @media (max-width: 900px) {
+  .hero-cover { display: none; }
+  .hero-content { text-align: center; }
+  .hero-stats { justify-content: center; }
   .main-container {
     flex-direction: column;
     height: auto;
