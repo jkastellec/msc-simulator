@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "msc-simulator",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "--directory", "/Users/jkastell/Desktop/msc-simulator"],
+      "port": 8000,
+      "autoPort": true
+    }
+  ]
+}
