@@ -27,8 +27,8 @@
   width: 100%;
 }
 .hero-content {
-  max-width: 720px;
-  margin: 0 auto;
+  flex: 1;
+  min-width: 0;
 }
 .hero-title {
   font-size: 32px;
