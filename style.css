@@ -18,6 +18,10 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  background: #0d1b2a;
+}
+
 /* Hero banner */
 .hero {
   background: #0d1b2a;
@@ -25,6 +29,7 @@
   padding: 40px 24px;
   text-align: center;
   width: 100%;
+  overflow: hidden;
 }
 .hero-layout {
   max-width: 900px;
@@ -65,9 +70,6 @@
   color: #8899aa;
   margin-bottom: 16px;
   line-height: 1.5;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
 }
 .hero-hint {
   font-size: 0.85rem;
@@ -131,6 +133,7 @@ body {
   background: var(--bg-dark);
   color: var(--text-primary);
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 header {
