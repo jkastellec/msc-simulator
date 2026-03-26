@@ -381,34 +381,74 @@ function renderDemSeatsMeanChart(canvasId, results, experimentNames) {
   destroyChart(canvasId);
   const ctx = document.getElementById(canvasId).getContext('2d');
   const datasets = [];
+  let hasTitForTat = false;
 
   results.forEach((result, idx) => {
     const agg = result.aggregated;
     const color = EXPERIMENT_COLORS[idx % EXPERIMENT_COLORS.length];
-    datasets.push({
-      label: experimentNames[idx],
-      data: agg.years.map((yr, i) => ({ x: yr, y: agg.demSeatsMean[i] })),
-      borderColor: color,
-      backgroundColor: 'transparent',
-      borderWidth: 2,
-      pointStyle: 'line',
-      pointRadius: 0,
-      tension: 0.3,
-    });
+
+    // For tit-for-tat, use tftDemSeatsMean (includes packed seats)
+    if (agg.tftDemSeatsMean) {
+      hasTitForTat = true;
+      datasets.push({
+        label: experimentNames[idx] + ' (Dem seats)',
+        data: agg.years.map((yr, i) => ({ x: yr, y: agg.tftDemSeatsMean[i] })),
+        borderColor: color,
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointStyle: 'line',
+        pointRadius: 0,
+        tension: 0.3,
+        yAxisID: 'y',
+      });
+      datasets.push({
+        label: experimentNames[idx] + ' (Dem share %)',
+        data: agg.years.map((yr, i) => ({ x: yr, y: agg.tftDemShareMean[i] * 100 })),
+        borderColor: color,
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [6, 3],
+        pointStyle: 'line',
+        pointRadius: 0,
+        tension: 0.3,
+        yAxisID: 'y1',
+      });
+    } else {
+      datasets.push({
+        label: experimentNames[idx],
+        data: agg.years.map((yr, i) => ({ x: yr, y: agg.demSeatsMean[i] })),
+        borderColor: color,
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointStyle: 'line',
+        pointRadius: 0,
+        tension: 0.3,
+        yAxisID: 'y',
+      });
+    }
   });
 
   const defaults = getChartDefaults();
+  const scales = {
+    ...defaults.scales,
+    x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
+    y: { ...defaults.scales.y, position: 'left', title: { display: true, text: 'Mean Dem-Appointed Seats', color: '#a0a0b0' } },
+  };
+
+  if (hasTitForTat) {
+    scales.y1 = {
+      ...defaults.scales.y,
+      position: 'right',
+      title: { display: true, text: 'Dem Share (%)', color: '#a0a0b0' },
+      min: 0, max: 100,
+      grid: { drawOnChartArea: false },
+    };
+  }
+
   charts[canvasId] = new Chart(ctx, {
     type: 'line',
     data: { datasets },
-    options: {
-      ...defaults,
-      scales: {
-        ...defaults.scales,
-        x: { ...defaults.scales.x, type: 'linear', ticks: { ...defaults.scales.x.ticks, includeBounds: true }, title: { display: true, text: 'Year', color: '#a0a0b0' } },
-        y: { ...defaults.scales.y, title: { display: true, text: 'Mean Dem-Appointed Seats', color: '#a0a0b0' } },
-      },
-    },
+    options: { ...defaults, scales },
   });
 }
 
