@@ -960,7 +960,26 @@ function aggregateTitForTat(nSeatsResults, simResults, params) {
     nSeatsP975[i] = seatVals[Math.min(nSims - 1, Math.floor(nSims * 0.975))];
   }
 
-  return { nSeatsMean, nSeatsP025, nSeatsP975, tftDemSeatsMean, tftDemShareMean };
+  // Build tft dem seats distribution by decade (for box plot)
+  const tftDemSeatsDistribution = {};
+  for (let i = 0; i < nYears; i++) {
+    const year = params.currentYear + i;
+    const decadeKey = Math.floor(year / 10) * 10;
+    if (!tftDemSeatsDistribution[decadeKey]) {
+      tftDemSeatsDistribution[decadeKey] = [];
+    }
+    for (let s = 0; s < nSims; s++) {
+      const packedDem = nSeatsResults[s].packedDemSeats[i];
+      let baselineDem = 0;
+      const sim = simResults[s];
+      for (let j = 0; j < Math.min(9, sim.numJustices); j++) {
+        if (sim.justices[j].demJustice[i] === 1) baselineDem++;
+      }
+      tftDemSeatsDistribution[decadeKey].push(baselineDem + packedDem);
+    }
+  }
+
+  return { nSeatsMean, nSeatsP025, nSeatsP975, tftDemSeatsMean, tftDemShareMean, tftDemSeatsDistribution };
 }
 
 // ============================================================

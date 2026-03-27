@@ -204,8 +204,11 @@ function renderDemSeatsBoxplot(canvasId, result) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   const agg = result.aggregated;
 
+  // Use tft distribution when available (tit-for-tat includes packed seats)
+  const distribution = agg.tftDemSeatsDistribution || agg.demSeatsDistribution;
+
   // Collect decade keys (2020, 2030, 2040, ... 2090)
-  const decadeYears = Object.keys(agg.demSeatsDistribution)
+  const decadeYears = Object.keys(distribution)
     .map(Number)
     .filter(yr => yr >= 2020 && yr < 2100)
     .sort();
@@ -215,7 +218,7 @@ function renderDemSeatsBoxplot(canvasId, result) {
   // Find max seats across all decades to set dynamic majority threshold and y-axis
   let maxSeats = 9;
   decadeYears.forEach(yr => {
-    const dist = agg.demSeatsDistribution[yr];
+    const dist = distribution[yr];
     if (dist) {
       const m = Math.max(...dist);
       if (m > maxSeats) maxSeats = m;
@@ -229,7 +232,7 @@ function renderDemSeatsBoxplot(canvasId, result) {
   const borderColors = [];
 
   decadeYears.forEach(yr => {
-    const dist = agg.demSeatsDistribution[yr];
+    const dist = distribution[yr];
     if (!dist || dist.length === 0) {
       boxplotData.push({ min: 0, q1: 0, median: 0, q3: 0, max: 0 });
       backgroundColors.push(CHART_COLORS.rep + '60');
